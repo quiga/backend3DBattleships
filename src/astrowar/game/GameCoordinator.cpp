@@ -6,6 +6,8 @@
  */
 
 #include "GameCoordinator.hpp"
+// Framework
+#include "../../graphics/Ois/OisFramework.hpp"
 
 #include <iostream>
 using namespace std;
@@ -13,10 +15,12 @@ using namespace std;
 GameCoordinator::GameCoordinator() :
 		mGridA(NULL), mGridB(NULL)
 {
+	OisFrameworkSingleton.addKeyListener(this);
 }
 
 GameCoordinator::~GameCoordinator()
 {
+	OisFrameworkSingleton.removeKeyListener(this);
 }
 
 // Key listener
@@ -24,6 +28,7 @@ bool GameCoordinator::keyPressed(const OIS::KeyEvent &arg)
 {
 	if (arg.key == OIS::KC_NUMPADENTER)
 	{
+		if (mGridA) mGridA->processSelected();
 	}
 	return true;
 }
@@ -43,6 +48,5 @@ void GameCoordinator::connectToGrids(Grid3D* gridA, Grid3D* gridB)
 	assert(gridA);
 	gridA->setGridListener(this);
 	mGridA = gridA;
-
 	mGridB = gridB;
 }
