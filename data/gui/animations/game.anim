@@ -4,7 +4,7 @@
 	<AnimationDefinition name="GameMenuHover" duration="0.1" replayMode="once" autoStart="false">
 		<Affector property="UnifiedYPosition" interpolator="UDim">
 			<KeyFrame position="0" sourceProperty="UnifiedYPosition" />
-			<KeyFrame position="0.1" value="{0.65,0}" progression="quadratic decelerating" />
+			<KeyFrame position="0.1" value="{0.8,0}" progression="quadratic decelerating" />
 		</Affector>
 		<Subscription event="MouseEntersArea" action="Start" />
 		<Subscription event="MouseLeavesArea" action="Stop" />

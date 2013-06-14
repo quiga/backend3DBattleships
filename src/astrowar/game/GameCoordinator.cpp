@@ -50,3 +50,10 @@ void GameCoordinator::connectToGrids(Grid3D* gridA, Grid3D* gridB)
 	mGridA = gridA;
 	mGridB = gridB;
 }
+
+// CEGUI handler
+bool GameCoordinator::handleFireButton(const CEGUI::EventArgs& arg)
+{
+	if (mGridA) mGridA->processSelected();
+	return true;
+}
