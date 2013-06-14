@@ -1,14 +1,13 @@
 <?xml version="1.0" ?>
 <GUILayout>
-    <Window Type="DefaultWindow" Name="root">
-        <Property Name="UnifiedPosition" Value="{{0,0},{0,0}}" />
-        <Property Name="UnifiedSize" Value="{{1,0},{1,0}}" />
-        
-        <Window Type="TaharezLook/Button" Name="Test/ExitButton5">
-            <Property Name="UnifiedPosition" Value="{{0.84,0},{0.70,0}}" />
-            <Property Name="UnifiedSize" Value="{{0.15,0},{0.05,0}}" />
-            <Property Name="Text" Value="Gomba 5" />
-        </Window>
-        
-    </Window>
+	<Window Name="Game" Type="DefaultWindow">
+		<Property Name="UnifiedPosition" Value="{{0,0},{0,0}}" />
+		<Property Name="UnifiedSize" Value="{{1,0},{1,0}}" />
+
+		<Window Name="Test/Button" Type="TaharezLook/Button">
+			<Property Name="UnifiedPosition" Value="{{0.84,0},{0.70,0}}" />
+			<Property Name="UnifiedSize" Value="{{0.15,0},{0.05,0}}" />
+			<Property Name="Text" Value="Gombaaa" />
+		</Window>
+	</Window>
 </GUILayout>

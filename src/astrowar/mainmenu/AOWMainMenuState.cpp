@@ -93,7 +93,10 @@ void AOWMainMenuState::onActivate()
 
 void AOWMainMenuState::onDeactivate()
 {
-	CEGUI::System::getSingleton().setGUISheet(NULL);
+	// CEGUI System singleton
+	CEGUI::System& guiSys = CEGUI::System::getSingleton();
+	// Init main menu
+	guiSys.executeScriptFile("shutdown_main_menu.lua");
 	OgreState::onDeactivate();
 }
 

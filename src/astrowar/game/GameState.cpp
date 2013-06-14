@@ -12,6 +12,7 @@
 #include "../../graphics/Ois/OisFramework.hpp"
 // CEGUI
 #include <CEGUI/CEGUI.h>
+#include "../../graphics/Cegui/CeguiTranslator.hpp"
 
 using namespace std;
 using namespace Ogre;
@@ -44,6 +45,14 @@ void GameState::onActivate()
 	mCamera->setAutoAspectRatio(true);
 	auto viewport = getViewport(0);
 	viewport->setBackgroundColour(ColourValue(0.1, 0.4, 0.7));
+
+	// CEGUI System singleton
+	CEGUI::System& guiSys = CEGUI::System::getSingleton();
+	// Init main menu
+	guiSys.executeScriptFile("init_game.lua");
+	// Translate windgets text
+	translateCeguiWindow(guiSys.getGUISheet());
+
 	mCameraNode = mSceneManager->getRootSceneNode()->createChildSceneNode("Camera Node");
 	mCameraNode->attachObject(mCamera);
 	// Create grids
@@ -63,6 +72,10 @@ void GameState::onActivate()
 
 void GameState::onDeactivate()
 {
+	// CEGUI System singleton
+	CEGUI::System& guiSys = CEGUI::System::getSingleton();
+	// Init main menu
+	guiSys.executeScriptFile("shutdown_game.lua");
 	// Destroy
 	mSceneManager->destroySceneNode(mCameraNode);
 	// Destroy Grids
