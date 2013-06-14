@@ -4,10 +4,10 @@ local system = CEGUI.System:getSingleton()
 local winman = CEGUI.WindowManager:getSingleton()
 local animan = CEGUI.AnimationManager:getSingleton()
 -- Init Main Menu Begin
-logger:logEvent("++++ Main Menu Shut Down Begin ++++")
+logger:logEvent("++++ Game Shut Down Begin ++++")
+-- Clear gui
+system:setGUISheet(nil)
 -- Destroy windows
 winman:destroyAllWindows()
--- Crear gui
-system:setGUISheet(nil);
 -- Init Main Menu End
-logger:logEvent("++++ Main Menu Shut Down Completed ++++")
+logger:logEvent("++++ Game Shut Down Completed ++++")

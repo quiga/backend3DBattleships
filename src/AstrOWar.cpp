@@ -132,6 +132,39 @@ public:
 	}
 };
 
+//
+class DumpState: public app::State
+{
+public:
+	DumpState(int i) :
+			mI(i), i(0)
+	{
+		cout << "State #" << mI << " created" << endl;
+	}
+	~DumpState()
+	{
+		cout << "State #" << mI << " destroyed" << endl;
+	}
+	void onActivate()
+	{
+		cout << "State #" << mI << " activated" << endl;
+	}
+	void onDeactivate()
+	{
+		cout << "State #" << mI << " deactivated" << endl;
+	}
+	void onRun()
+	{
+		cout << "State #" << mI << " running #" << i << endl;
+		if (mI < 3 && i == 3)
+			pushState(app::State::Ptr(new DumpState(mI + 1)));
+		else if (i >= 4) stop();
+		++i;
+	}
+private:
+	int mI, i;
+};
+
 int main(int argc, char** argv)
 {
 	// Init settings
@@ -151,7 +184,8 @@ int main(int argc, char** argv)
 			OisCeguiInputListener::getSingleton().init();
 		}
 		// Start application
-		app::Main->run(app::State::Ptr(new AOWMainMenuState));
+//		app::MainSingleton.run(app::State::Ptr(new DumpState(0)));
+		app::MainSingleton.run(app::State::Ptr(new AOWMainMenuState));
 		// Destroy Frameworks
 		OisOgreWindowListener::getSingleton().shutdown();
 		OisCeguiInputListener::getSingleton().shutdown();

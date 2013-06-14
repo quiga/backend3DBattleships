@@ -109,7 +109,7 @@ bool AOWMainMenuState::onePlayerButtonHandler(const CEGUI::EventArgs& e)
 
 bool AOWMainMenuState::exitButtonHandler(const CEGUI::EventArgs& e)
 {
-	popAllState();
+	stop();
 	return true;
 }
 

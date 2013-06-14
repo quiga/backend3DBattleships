@@ -16,7 +16,7 @@
 namespace app
 {
 
-class Main_t
+class Main
 {
 public:
 	/// Push a new state.
@@ -26,26 +26,28 @@ public:
 	/// Pop the top state.
 	void popState();
 	/// Pop all state
-	void popAllState();
+	void stop();
 
 	/// Start and run the state machine.
 	int run(State::Ptr startState);
 
 	/// Smart pointer type for the app::Main class.
-	typedef std::shared_ptr<Main_t> Ptr;
+	typedef std::shared_ptr<Main> Ptr;
 	/// Singleton object of app::Main class.
-	static Ptr getInstance();
+	static Main& getSingleton();
 private:
 	/// The stack of the states.
 	std::stack<State::Ptr> m_states;
+	/// Exit
+	bool mRunning;
 
 	/// Default constructor.
-	Main_t();
+	Main();
 	/// Update the state.
 	void updateState();
 };
 
-extern Main_t::Ptr Main;
+extern Main& MainSingleton;
 
 } /* namespace app */
 #endif /* APP_MAIN_HPP_ */

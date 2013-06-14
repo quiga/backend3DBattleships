@@ -53,7 +53,7 @@ void State::onRun()
  */
 void State::pushState(State::Ptr newState)
 {
-	Main->pushState(newState);
+	MainSingleton.pushState(newState);
 }
 
 /**
@@ -62,7 +62,7 @@ void State::pushState(State::Ptr newState)
  */
 void State::replaceState(State::Ptr newState)
 {
-	Main->replaceState(newState);
+	MainSingleton.replaceState(newState);
 }
 
 /**
@@ -70,15 +70,15 @@ void State::replaceState(State::Ptr newState)
  */
 void State::popState()
 {
-	Main->popState();
+	MainSingleton.popState();
 }
 
 /**
  * Pop all the state from the stack
  */
-void State::popAllState()
+void State::stop()
 {
-	Main->popAllState();
+	MainSingleton.stop();
 }
 
 } /* namespace app */

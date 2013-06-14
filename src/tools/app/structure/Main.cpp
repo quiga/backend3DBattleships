@@ -17,7 +17,7 @@ using namespace std;
  * Only work if the new state is non-nil.
  * @param newState the new state to the state machine.
  */
-void Main_t::pushState(const State::Ptr newState)
+void Main::pushState(const State::Ptr newState)
 {
 	if (!newState) return;
 	m_states.push(newState);
@@ -28,7 +28,7 @@ void Main_t::pushState(const State::Ptr newState)
  * Only work if the new state is non-nil.
  * @param newState the new state to the state machine replacing the top state.
  */
-void Main_t::replaceState(const State::Ptr newState)
+void Main::replaceState(const State::Ptr newState)
 {
 	if (!newState) return;
 	if (!m_states.empty()) m_states.pop();
@@ -38,7 +38,7 @@ void Main_t::replaceState(const State::Ptr newState)
 /**
  * Pop the top state from the state machine
  */
-void Main_t::popState()
+void Main::popState()
 {
 	if (!m_states.empty()) m_states.pop();
 }
@@ -46,10 +46,16 @@ void Main_t::popState()
 /**
  * Pop all the state from the stack
  */
-void Main_t::popAllState()
+void Main::stop()
 {
+	mRunning = false;
+
+	if (!m_states.empty()) m_states.top()->onDeactivate();
 	while (!m_states.empty())
+	{
 		m_states.pop();
+		updateState();
+	}
 }
 
 /**
@@ -57,10 +63,11 @@ void Main_t::popAllState()
  * Run the state then call update the state.
  * @param startState starting state of the application.
  */
-int Main_t::run(State::Ptr startState)
+int Main::run(State::Ptr startState)
 {
 	pushState(startState);
 	startState.reset();
+	mRunning = true;
 
 	updateState();
 	while (!m_states.empty())
@@ -75,18 +82,19 @@ int Main_t::run(State::Ptr startState)
  * Singleton getter function.
  * @return Main::Ptr the main instance of the main function.
  */
-Main_t::Ptr Main_t::getInstance()
+Main& Main::getSingleton()
 {
-	static Ptr instance(new Main_t());
+	static Main instance;
 	return instance;
 }
 
-Main_t::Ptr Main = Main_t::getInstance();
+Main& MainSingleton = Main::getSingleton();
 
 /**
  * Default constructor.
  */
-Main_t::Main_t()
+Main::Main() :
+		mRunning(false)
 {
 }
 
@@ -94,7 +102,7 @@ Main_t::Main_t()
  * Update the active state and run the 'onActivate' and 'onDeactivate' functions
  * on the states.
  */
-void Main_t::updateState()
+void Main::updateState()
 {
 	static State::Ptr s_prev_state;
 	State::Ptr actState;
@@ -103,7 +111,7 @@ void Main_t::updateState()
 	if (!m_states.empty()) actState = m_states.top();
 
 	// Run the corresponding functions
-	if (s_prev_state != actState)
+	if (mRunning && s_prev_state != actState)
 	{
 		if (s_prev_state) s_prev_state->onDeactivate();
 		if (actState) actState->onActivate();

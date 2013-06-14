@@ -3,11 +3,18 @@
 	<Window Name="Game" Type="DefaultWindow">
 		<Property Name="UnifiedPosition" Value="{{0,0},{0,0}}" />
 		<Property Name="UnifiedSize" Value="{{1,0},{1,0}}" />
-
 		<Window Name="Test/Button" Type="TaharezLook/Button">
 			<Property Name="UnifiedPosition" Value="{{0.84,0},{0.70,0}}" />
 			<Property Name="UnifiedSize" Value="{{0.15,0},{0.05,0}}" />
 			<Property Name="Text" Value="Gombaaa" />
+		</Window>
+		<Window Name="Game/Menu" Type="TaharezLook/FrameWindow">
+			<Property Name="UnifiedPosition" Value="{{0.05,0},{0.65,0}}" />
+			<Property Name="UnifiedSize" Value="{{0.2,0},{0.35,0}}" />
+			<Property Name="AlwaysOnTop" Value="True" />
+			<Property Name="RollUpEnabled" Value="False" />
+			<Property Name="SizingEnabled" Value="False" />
+			<Property Name="DragMovingEnabled" Value="False" />
 		</Window>
 	</Window>
 </GUILayout>

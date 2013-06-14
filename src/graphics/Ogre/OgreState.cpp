@@ -71,12 +71,12 @@ void OgreState::onRun()
 	if (OgreFrameworkSingleton.getRenderWindow()->isClosed())
 	{
 		// Pop all the state to exit the application
-		popAllState();
+		stop();
 		// No need to continue the Running
 		return;
 	}
 	// Capture the inputs
 	OisFrameworkSingleton.capture();
 	// Render one frame of Ogre and pop all state if fail
-	if (!OgreFrameworkSingleton.getRoot()->renderOneFrame()) popAllState();
+	if (!OgreFrameworkSingleton.getRoot()->renderOneFrame()) stop();
 }

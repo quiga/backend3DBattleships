@@ -1,10 +1,12 @@
 <?xml version="1.0" ?>
 <Animations>
 
-	<AnimationDefinition name="ConnectionProgress" duration="1.0" replayMode="loop" autoStart="true">
+	<AnimationDefinition name="ConnectionProgress" duration="3.0" replayMode="loop" autoStart="true">
 		<Affector property="CurrentProgress" interpolator="float">
 			<KeyFrame position="0" value="0.0" />
-			<KeyFrame position="1.0" value="1.0" progression="linear" />
+			<KeyFrame position="1.3" value="0.9" progression="linear" />
+			<KeyFrame position="2.1" value="0.3" progression="linear" />
+			<KeyFrame position="3.0" value="1.0" progression="linear" />
 		</Affector>
 	</AnimationDefinition>
 

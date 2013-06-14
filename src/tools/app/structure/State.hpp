@@ -24,7 +24,7 @@ public:
 	virtual ~State();
 protected:
 	/// The main class can manipulate.
-	friend class Main_t;
+	friend class Main;
 
 	/// Run when the state become active.
 	virtual void onActivate();
@@ -41,7 +41,7 @@ protected:
 	/// Pop the active state (stop).
 	void popState();
 	/// Pop all the state
-	void popAllState();
+	void stop();
 };
 
 } /* namespace app */

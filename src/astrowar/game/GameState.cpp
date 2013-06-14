@@ -72,10 +72,7 @@ void GameState::onActivate()
 
 void GameState::onDeactivate()
 {
-	// CEGUI System singleton
-	CEGUI::System& guiSys = CEGUI::System::getSingleton();
-	// Init main menu
-	guiSys.executeScriptFile("shutdown_game.lua");
+	cout << "Deactivate game" << endl;
 	// Destroy
 	mSceneManager->destroySceneNode(mCameraNode);
 	// Destroy Grids
@@ -83,6 +80,10 @@ void GameState::onDeactivate()
 	// Remove from listeners
 	OisFrameworkSingleton.removeMouseListener(this);
 	OisFrameworkSingleton.removeKeyListener(this);
+	// CEGUI System singleton
+	CEGUI::System& guiSys = CEGUI::System::getSingleton();
+	// Init main menu
+	guiSys.executeScriptFile("shutdown_game.lua");
 	// Super class
 	OgreState::onDeactivate();
 }

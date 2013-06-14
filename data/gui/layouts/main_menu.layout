@@ -32,9 +32,8 @@
 				<Property Name="HorizontalAlignment" Value="Centre" />
 			</Window>
 		</Window>
-		<Window Name="MainMenu/Credits" Type="TaharezLook/FrameWindow">
+		<Window Name="MainMenu/Credits" Type="TaharezLook/StaticText">
 			<Property Name="UnifiedAreaRect" Value="{{0,0},{0,0},{0.9,0},{0.9,0}}" />
-			<Property Name="Text" Value="@credits.windowstitle" />
 			<Property Name="Visible" Value="False" />
 			<Property Name="AlwaysOnTop" Value="True" />
 			<Property Name="RollUpEnabled" Value="False" />
@@ -42,10 +41,12 @@
 			<Property Name="DragMovingEnabled" Value="False" />
 			<Property Name="VerticalAlignment" Value="Centre" />
 			<Property Name="HorizontalAlignment" Value="Centre" />
-			<Event Name="CloseClicked" Function="mainmenu_credits_exit_clicked" />
-			<AutoWindow NameSuffix="__auto_titlebar__">
-				<Property Name="DraggingEnabled" Value="False" />
-			</AutoWindow>
+			<Window Name="MainMenu/Credits/BackButton" Type="TaharezLook/Button">
+				<Property Name="UnifiedPosition" Value="{{0.9,-20},{0.95,-20}}" />
+				<Property Name="UnifiedSize" Value="{{0.1,0},{0.05,0}}" />
+				<Property Name="Text" Value="@general.back" />
+				<Event Name="Clicked" Function="mainmenu_credits_exit_clicked" />
+			</Window>
 			<Window Name="MainMenu/Credits/ShipmodelsLabel" Type="TaharezLook/StaticText">
 				<Property Name="UnifiedAreaRect" Value="{{0,0},{0.4,0},{0.3,0},{0.45,0}}" />
 				<Property Name="Text" Value="@credits.shipmodels" />
