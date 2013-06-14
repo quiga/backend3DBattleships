@@ -11,7 +11,6 @@
 // Frameworks
 #include "../../graphics/Ois/OisFramework.hpp"
 // CEGUI
-#include <CEGUI/CEGUI.h>
 #include "../../graphics/Cegui/CeguiTranslator.hpp"
 
 using namespace std;
@@ -68,6 +67,9 @@ void GameState::onActivate()
 	// Add to listeners
 	OisFrameworkSingleton.addMouseListener(this);
 	OisFrameworkSingleton.addKeyListener(this);
+	// Back Button
+	CEGUI::PushButton* backButton = static_cast<CEGUI::PushButton*>(guiSys.getGUISheet()->getChildRecursive("Game/Menu/BackButton"));
+	if (backButton) backButton->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&GameState::backButtonHandler, this));
 }
 
 void GameState::onDeactivate()
@@ -122,5 +124,12 @@ bool GameState::keyPressed(const OIS::KeyEvent &arg)
 
 bool GameState::keyReleased(const OIS::KeyEvent &arg)
 {
+	return true;
+}
+
+// CEGUI handlers
+bool GameState::backButtonHandler(const CEGUI::EventArgs& arg)
+{
+	popState();
 	return true;
 }

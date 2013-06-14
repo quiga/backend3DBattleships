@@ -16,6 +16,8 @@
 #include "GameCoordinator.hpp"
 // Network
 #include <SFML/Network.hpp>
+// CEGUI
+#include <CEGUI/CEGUI.h>
 
 class GameState: public OgreState, public OIS::MouseListener, public OIS::KeyListener
 {
@@ -35,6 +37,8 @@ protected:
 	// Key listener
 	bool keyPressed(const OIS::KeyEvent &arg);
 	bool keyReleased(const OIS::KeyEvent &arg);
+	// CEGUI handlers
+	bool backButtonHandler(const CEGUI::EventArgs& arg);
 	// Torpedo
 	std::shared_ptr<Grid3D> gridA;
 	// Camera

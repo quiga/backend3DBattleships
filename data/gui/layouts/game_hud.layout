@@ -8,13 +8,20 @@
 			<Property Name="UnifiedSize" Value="{{0.15,0},{0.05,0}}" />
 			<Property Name="Text" Value="Gombaaa" />
 		</Window>
-		<Window Name="Game/Menu" Type="TaharezLook/FrameWindow">
-			<Property Name="UnifiedPosition" Value="{{0.05,0},{0.65,0}}" />
+		<Window Name="Game/Menu" Type="TaharezLook/StaticText">
+			<Property Name="UnifiedPosition" Value="{{0,0},{0.93,0}}" />
 			<Property Name="UnifiedSize" Value="{{0.2,0},{0.35,0}}" />
 			<Property Name="AlwaysOnTop" Value="True" />
-			<Property Name="RollUpEnabled" Value="False" />
-			<Property Name="SizingEnabled" Value="False" />
-			<Property Name="DragMovingEnabled" Value="False" />
+			<Window Name="Game/Menu/TitleLabel" Type="TaharezLook/StaticText">
+				<Property Name="UnifiedPosition" Value="{{0,0},{0,0}}" />
+				<Property Name="UnifiedSize" Value="{{1,0},{0.2,0}}" />
+				<Property Name="Text" Value="@game.menu.title" />
+			</Window>
+			<Window Name="Game/Menu/BackButton" Type="TaharezLook/Button">
+				<Property Name="UnifiedPosition" Value="{{0.02,0},{0.78,0}}" />
+				<Property Name="UnifiedSize" Value="{{0.96,0},{0.2,0}}" />
+				<Property Name="Text" Value="@general.back" />
+			</Window>
 		</Window>
 	</Window>
 </GUILayout>

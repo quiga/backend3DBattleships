@@ -14,7 +14,7 @@ system:setGUISheet(layout);
 -- Connection progress animation
 local serverConnectProgress = winman:getWindow("MainMenu/ServerWaiting/Progress")
 local clientConnectProgress = winman:getWindow("MainMenu/ClientWaiting/Progress")
-local anim = animan:loadAnimationsFromXML("main_menu.anim")
+animan:loadAnimationsFromXML("main_menu.anim")
 local animinsServer = animan:instantiateAnimation("ConnectionProgress")
 local animinsClient = animan:instantiateAnimation("ConnectionProgress")
 animinsServer:setTargetWindow(serverConnectProgress)

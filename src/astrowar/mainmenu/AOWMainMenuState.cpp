@@ -9,7 +9,6 @@
 // AOW
 #include "../game/GameState.hpp"
 // CEGUI
-#include <CEGUI/CEGUI.h>
 #include "../../graphics/Cegui/CeguiTranslator.hpp"
 
 #include <iostream>

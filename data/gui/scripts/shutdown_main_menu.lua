@@ -9,7 +9,7 @@ logger:logEvent("++++ Main Menu Shut Down Begin ++++")
 system:setGUISheet(nil);
 -- Destroy windows
 winman:destroyAllWindows()
--- Crear animation
+-- Clear animation
 animan:destroyAnimation("ConnectionProgress")
 -- Init Main Menu End
 logger:logEvent("++++ Main Menu Shut Down Completed ++++")

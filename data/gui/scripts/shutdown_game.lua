@@ -9,5 +9,8 @@ logger:logEvent("++++ Game Shut Down Begin ++++")
 system:setGUISheet(nil)
 -- Destroy windows
 winman:destroyAllWindows()
+-- Clear animation
+animan:destroyAnimation("GameMenuHover")
+animan:destroyAnimation("GameMenuLeave")
 -- Init Main Menu End
 logger:logEvent("++++ Game Shut Down Completed ++++")

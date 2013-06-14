@@ -21,3 +21,4 @@ multi.client.url	Address	Cím
 multi.client.start	Connect	Kapcsolódás
 multi.server.waitingtitle	Waiting for client	Várakozás a kliensre
 multi.client.waitingtitle	Connecting to server	Csatlakozás a szervezhez
+game.menu.title	Menu	Menü
