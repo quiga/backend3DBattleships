@@ -228,13 +228,13 @@
 			</Window>
 		</Window>
 
-		<Window Name="MainMenu/ServerWaiting" Type="TaharezLook/FrameWindow">
+		<Window Name="MainMenu/ServerWaiting" Type="TaharezLook/StaticText">
 			<Property Name="UnifiedAreaRect" Value="{{0.0,0},{0.0,0},{0.3,0},{0.2,0}}" />
 			<Property Name="HorizontalAlignment" Value="Centre" />
 			<Property Name="VerticalAlignment" Value="Centre" />
 			<Property Name="CloseButtonEnabled" Value="False" />
 			<Property Name="Visible" Value="False" />
-			<Property Name="Text" Value="@multi.server.waitingtitle" />
+			<!-- <Property Name="Text" Value="@multi.server.waitingtitle" /> -->
 			<Window Name="MainMenu/ServerWaiting/Progress" Type="TaharezLook/ProgressBar">
 				<Property Name="UnifiedAreaRect" Value="{{0,0},{0.2,0},{0.9,0},{0.5,0}}" />
 				<Property Name="UnifiedMaxSize" Value="{{1,0},{1,0}}" />
@@ -248,13 +248,13 @@
 				<Event Name="Clicked" Function="mainmenu_server_cancel_clicked" />
 			</Window>
 		</Window>
-		<Window Name="MainMenu/ClientWaiting" Type="TaharezLook/FrameWindow">
+		<Window Name="MainMenu/ClientWaiting" Type="TaharezLook/StaticText">
 			<Property Name="UnifiedAreaRect" Value="{{0.0,0},{0.0,0},{0.3,0},{0.2,0}}" />
 			<Property Name="HorizontalAlignment" Value="Centre" />
 			<Property Name="VerticalAlignment" Value="Centre" />
 			<Property Name="CloseButtonEnabled" Value="False" />
 			<Property Name="Visible" Value="False" />
-			<Property Name="Text" Value="@multi.client.waitingtitle" />
+			<!-- <Property Name="Text" Value="@multi.client.waitingtitle" /> -->
 			<Window Name="MainMenu/ClientWaiting/Progress" Type="TaharezLook/ProgressBar">
 				<Property Name="UnifiedAreaRect" Value="{{0,0},{0.2,0},{0.9,0},{0.5,0}}" />
 				<Property Name="UnifiedMaxSize" Value="{{1,0},{1,0}}" />
