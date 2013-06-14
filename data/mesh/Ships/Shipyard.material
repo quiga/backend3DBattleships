@@ -1,0 +1,121 @@
+
+material _missing_material_
+{
+    receive_shadows off
+    technique
+    {
+        pass
+        {
+            ambient 0.1 0.1 0.1 1.0
+            diffuse 0.8 0.0 0.0 1.0
+            specular 0.5 0.5 0.5 1.0 12.5
+            emissive 0.3 0.3 0.3 1.0
+        }
+    }
+}
+
+// Flat genrated by blender2ogre 0.5.9
+
+material Flat 
+{
+    receive_shadows on 
+
+    technique
+    {
+        pass Flat
+        {
+            ambient 0.39311328530311584 0.39311328530311584 0.39311328530311584 1.0
+            diffuse 0.3144906329287682 0.3144906329287682 0.3144906329287682 1.0
+            specular 0.0 0.0 0.0 1.0 12.5
+            emissive 0.0 0.0 0.0 1.0
+
+            alpha_to_coverage off
+            colour_write on
+            cull_hardware clockwise
+            depth_check on
+            depth_func less_equal
+            depth_write on
+            illumination_stage 
+            light_clip_planes off
+            light_scissor off
+            lighting on
+            normalise_normals off
+            polygon_mode solid
+            scene_blend one zero
+            scene_blend_op add
+            shading gouraud
+            transparent_sorting on
+
+        }
+    }
+}
+// Flat.001 genrated by blender2ogre 0.5.9
+
+material Flat.001 
+{
+    receive_shadows on 
+
+    technique
+    {
+        pass Flat.001
+        {
+            ambient 0.33133015036582947 0.32161369919776917 0.34999990463256836 1.0
+            diffuse 0.26506412424242676 0.2572909631921494 0.2799999278783787 1.0
+            specular 0.0 0.0 0.0 1.0 12.5
+            emissive 0.0 0.0 0.0 1.0
+
+            alpha_to_coverage off
+            colour_write on
+            cull_hardware clockwise
+            depth_check on
+            depth_func less_equal
+            depth_write on
+            illumination_stage 
+            light_clip_planes off
+            light_scissor off
+            lighting on
+            normalise_normals off
+            polygon_mode solid
+            scene_blend one zero
+            scene_blend_op add
+            shading gouraud
+            transparent_sorting on
+
+        }
+    }
+}
+// Glass genrated by blender2ogre 0.5.9
+
+material Glass 
+{
+    receive_shadows on 
+
+    technique
+    {
+        pass Glass
+        {
+            ambient 0.5783629417419434 0.7561874389648438 1.0 1.0
+            diffuse 0.4626903602881782 0.6049499601863317 0.800000011920929 1.0
+            specular 0.5710484981536865 0.5710484981536865 0.5710484981536865 1.0 118.25
+            emissive 1.1567258834838867 1.5123748779296875 2.0 1.0
+
+            alpha_to_coverage off
+            colour_write on
+            cull_hardware clockwise
+            depth_check on
+            depth_func less_equal
+            depth_write on
+            illumination_stage 
+            light_clip_planes off
+            light_scissor off
+            lighting on
+            normalise_normals off
+            polygon_mode solid
+            scene_blend one zero
+            scene_blend_op add
+            shading gouraud
+            transparent_sorting on
+
+        }
+    }
+}

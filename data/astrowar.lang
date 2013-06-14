@@ -1,0 +1,23 @@
+ID	en	hu
+main.localname	English	Magyar
+main.title	AstrOWar	AstrOWar
+main.helloworld	Hello World!	Szevasz világ!
+general.cancel	Cancel	Mégse
+general.back	Back	Vissza
+mainmenu.singleplayer	Singleplayer	Egyjátékos
+mainmenu.multiplayer	Multiplayer	Többjátékos
+mainmenu.credits	Credits	Kreditlista
+mainmenu.exit	Exit	Kilépés
+credits.windowstitle	Credits	Kreditlista
+credits.programmers	Programmers	Programozók
+credits.shipmodels	Shipmodels by	Hajómodellek
+credits.libs	Used Libraries	Könyvtárak
+multi.server.title	Server	Szerver
+multi.server.port	Port	Port
+multi.server.start	Start	Indítás
+multi.client.title	Client	Kliens
+multi.client.port	Port	Port
+multi.client.url	Address	Cím
+multi.client.start	Connect	Kapcsolódás
+multi.server.waitingtitle	Waiting for client	Várakozás a kliensre
+multi.client.waitingtitle	Connecting to server	Csatlakozás a szervezhez

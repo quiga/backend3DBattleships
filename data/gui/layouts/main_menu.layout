@@ -1,0 +1,271 @@
+<GUILayout>
+	<Window Name="MainMenu" Type="DefaultWindow">
+		<Property Name="UnifiedAreaRect" Value="{{0,0},{0,0},{1,0},{1,0}}" />
+		<Property Name="UnifiedMaxSize" Value="{{1,0},{1,0}}" />
+		<Window Name="MainMenu/Menu" Type="DefaultWindow">
+			<Property Name="UnifiedAreaRect" Value="{{0.6,0},{0.5,0},{0.9,0},{0.9,0}}" />
+			<Property Name="UnifiedMaxSize" Value="{{1,0},{1,0}}" />
+			<Window Name="MainMenu/Menu/SingleplayerButton" Type="TaharezLook/Button">
+				<Property Name="UnifiedAreaRect" Value="{{0,0},{-0.175,-1},{0.9,0},{-0.025,-1}}" />
+				<Property Name="Text" Value="@mainmenu.singleplayer" />
+				<Property Name="VerticalAlignment" Value="Centre" />
+				<Property Name="HorizontalAlignment" Value="Centre" />
+			</Window>
+			<Window Name="MainMenu/Menu/MultiplayerButton" Type="TaharezLook/Button">
+				<Property Name="UnifiedAreaRect" Value="{{0,0},{0,0},{0.9,2},{0.15,0}}" />
+				<Property Name="Text" Value="@mainmenu.multiplayer" />
+				<Property Name="VerticalAlignment" Value="Centre" />
+				<Property Name="HorizontalAlignment" Value="Centre" />
+				<Event Name="Clicked" Function="mainmenu_multi_show" />
+			</Window>
+			<Window Name="MainMenu/Menu/CreditsButton" Type="TaharezLook/Button">
+				<Property Name="UnifiedAreaRect" Value="{{0,0},{0.175,0},{0.9,2},{0.325,0}}" />
+				<Property Name="Text" Value="@mainmenu.credits" />
+				<Property Name="VerticalAlignment" Value="Centre" />
+				<Property Name="HorizontalAlignment" Value="Centre" />
+				<Event Name="Clicked" Function="mainmenu_credits_clicked" />
+			</Window>
+			<Window Name="MainMenu/Menu/ExitButton" Type="TaharezLook/Button">
+				<Property Name="UnifiedAreaRect" Value="{{0,0},{0.35,0},{0.9,2},{0.5,0}}" />
+				<Property Name="Text" Value="@mainmenu.exit" />
+				<Property Name="VerticalAlignment" Value="Centre" />
+				<Property Name="HorizontalAlignment" Value="Centre" />
+			</Window>
+		</Window>
+		<Window Name="MainMenu/Credits" Type="TaharezLook/FrameWindow">
+			<Property Name="UnifiedAreaRect" Value="{{0,0},{0,0},{0.9,0},{0.9,0}}" />
+			<Property Name="Text" Value="@credits.windowstitle" />
+			<Property Name="Visible" Value="False" />
+			<Property Name="AlwaysOnTop" Value="True" />
+			<Property Name="RollUpEnabled" Value="False" />
+			<Property Name="SizingEnabled" Value="False" />
+			<Property Name="DragMovingEnabled" Value="False" />
+			<Property Name="VerticalAlignment" Value="Centre" />
+			<Property Name="HorizontalAlignment" Value="Centre" />
+			<Event Name="CloseClicked" Function="mainmenu_credits_exit_clicked" />
+			<AutoWindow NameSuffix="__auto_titlebar__">
+				<Property Name="DraggingEnabled" Value="False" />
+			</AutoWindow>
+			<Window Name="MainMenu/Credits/ShipmodelsLabel" Type="TaharezLook/StaticText">
+				<Property Name="UnifiedAreaRect" Value="{{0,0},{0.4,0},{0.3,0},{0.45,0}}" />
+				<Property Name="Text" Value="@credits.shipmodels" />
+				<Property Name="UnifiedMaxSize" Value="{{1,0},{1,0}}" />
+				<Property Name="FrameEnabled" Value="False" />
+				<Property Name="HorzFormatting" Value="HorzCentred" />
+				<Property Name="BackgroundEnabled" Value="False" />
+				<Property Name="HorizontalAlignment" Value="Centre" />
+			</Window>
+			<Window Name="MainMenu/Credits/ShipmodelsName" Type="TaharezLook/StaticText">
+				<Property Name="UnifiedAreaRect" Value="{{0,0},{0.5,0},{0.6,0},{0.549999,0}}" />
+				<Property Name="Font" Value="DejaVuSans-10" />
+				<Property Name="Text" Value="greyoxide (http://www.blendswap.com/blends/view/17601)" />
+				<Property Name="UnifiedMaxSize" Value="{{1,0},{1,0}}" />
+				<Property Name="FrameEnabled" Value="False" />
+				<Property Name="HorzFormatting" Value="HorzCentred" />
+				<Property Name="BackgroundEnabled" Value="False" />
+				<Property Name="HorizontalAlignment" Value="Centre" />
+			</Window>
+			<Window Name="MainMenu/Credits/ProgrammersLabel" Type="TaharezLook/StaticText">
+				<Property Name="UnifiedAreaRect" Value="{{0,0},{0.1,0},{0.3,0},{0.15,0}}" />
+				<Property Name="Text" Value="@credits.programmers" />
+				<Property Name="UnifiedMaxSize" Value="{{1,0},{1,0}}" />
+				<Property Name="FrameEnabled" Value="False" />
+				<Property Name="HorzFormatting" Value="HorzCentred" />
+				<Property Name="BackgroundEnabled" Value="False" />
+				<Property Name="HorizontalAlignment" Value="Centre" />
+			</Window>
+			<Window Name="MainMenu/Credits/ProgrammersName" Type="TaharezLook/StaticText">
+				<Property Name="UnifiedAreaRect" Value="{{0,0},{0.2,0},{0.6,0},{0.25,0}}" />
+				<Property Name="Font" Value="DejaVuSans-10" />
+				<Property Name="Text" Value="Lászlóffy Barnabás                                       Quinz Gábor" />
+				<Property Name="UnifiedMaxSize" Value="{{1,0},{1,0}}" />
+				<Property Name="FrameEnabled" Value="False" />
+				<Property Name="HorzFormatting" Value="HorzCentred" />
+				<Property Name="BackgroundEnabled" Value="False" />
+				<Property Name="HorizontalAlignment" Value="Centre" />
+			</Window>
+			<Window Name="MainMenu/Credits/LibsLabel" Type="TaharezLook/StaticText">
+				<Property Name="UnifiedAreaRect" Value="{{0,0},{0.7,0},{0.3,0},{0.75,0}}" />
+				<Property Name="Text" Value="@credits.libs" />
+				<Property Name="UnifiedMaxSize" Value="{{1,0},{1,0}}" />
+				<Property Name="FrameEnabled" Value="False" />
+				<Property Name="HorzFormatting" Value="HorzCentred" />
+				<Property Name="BackgroundEnabled" Value="False" />
+				<Property Name="HorizontalAlignment" Value="Centre" />
+			</Window>
+			<Window Name="MainMenu/Credits/LibOgreImage" Type="TaharezLook/StaticImage">
+				<Property Name="UnifiedAreaRect" Value="{{0,-50},{0.8,1},{0,20},{0.8,71.84}}" />
+				<Property Name="Image" Value="set:LibLogos image:OgreLogo" />
+				<Property Name="UnifiedMaxSize" Value="{{1,0},{1,0}}" />
+				<Property Name="FrameEnabled" Value="False" />
+				<Property Name="BackgroundEnabled" Value="False" />
+				<Property Name="HorizontalAlignment" Value="Centre" />
+			</Window>
+			<Window Name="MainMenu/Credits/LibCeguiImage" Type="TaharezLook/StaticImage">
+				<Property Name="UnifiedAreaRect" Value="{{0,50},{0.8,0},{0,123},{0.8,70}}" />
+				<Property Name="Image" Value="set:LibLogos image:CeguiLogo" />
+				<Property Name="UnifiedMaxSize" Value="{{1,0},{1,0}}" />
+				<Property Name="FrameEnabled" Value="False" />
+				<Property Name="BackgroundEnabled" Value="False" />
+				<Property Name="HorizontalAlignment" Value="Centre" />
+			</Window>
+		</Window>
+		<Window Name="MainMenu/MultiTab" Type="TaharezLook/TabControl">
+			<Property Name="UnifiedAreaRect" Value="{{0,0},{0,0},{0.4,0},{0.3,0}}" />
+			<Property Name="Visible" Value="False" />
+			<Property Name="TabHeight" Value="{0,26.625}" />
+			<Property Name="VerticalAlignment" Value="Centre" />
+			<Property Name="HorizontalAlignment" Value="Centre" />
+			<AutoWindow NameSuffix="__auto_TabPane__">
+				<Property Name="EnableBottom" Value="1" />
+			</AutoWindow>
+			<AutoWindow NameSuffix="__auto_TabPane__Buttons">
+				<Property Name="EnableTop" Value="0" />
+			</AutoWindow>
+			<AutoWindow NameSuffix="__auto_TabPane__ScrollLeft">
+				<Property Name="Visible" Value="False" />
+			</AutoWindow>
+			<AutoWindow NameSuffix="__auto_TabPane__ScrollRight">
+				<Property Name="Visible" Value="False" />
+			</AutoWindow>
+			<Window Name="MainMenu/ServerPanel" Type="DefaultWindow">
+				<Property Name="UnifiedAreaRect" Value="{{0,0},{0,0},{1,0},{1,0}}" />
+				<Property Name="Text" Value="@multi.server.title" />
+				<Property Name="UnifiedMaxSize" Value="{{1,0},{1,0}}" />
+				<Window Name="MainMenu/ServerPanel/Port" Type="TaharezLook/Spinner">
+					<Property Name="UnifiedAreaRect" Value="{{0.15,0},{0.2,0},{0.75,0},{0.35,0}}" />
+					<Property Name="Text" Value="23343" />
+					<Property Name="HorizontalAlignment" Value="Centre" />
+					<AutoWindow NameSuffix="__auto_editbox__">
+						<Property Name="Text" Value="23343" />
+						<Property Name="ValidationString" Value="-?\d*" />
+					</AutoWindow>
+					<AutoWindow NameSuffix="__auto_incbtn__">
+						<Property Name="WantsMultiClickEvents" Value="False" />
+						<Property Name="MouseButtonDownAutoRepeat" Value="True" />
+					</AutoWindow>
+					<AutoWindow NameSuffix="__auto_decbtn__">
+						<Property Name="WantsMultiClickEvents" Value="False" />
+						<Property Name="MouseButtonDownAutoRepeat" Value="True" />
+					</AutoWindow>
+				</Window>
+				<Window Name="MainMenu/ServerPanel/StartButton" Type="TaharezLook/Button">
+					<Property Name="UnifiedAreaRect" Value="{{0,0},{0.5,0},{0.5,0},{0.75,0}}" />
+					<Property Name="Text" Value="@multi.server.start" />
+					<Property Name="HorizontalAlignment" Value="Centre" />
+					<Event Name="Clicked" Function="mainmenu_server_start_clicked" />
+				</Window>
+				<Window Name="MainMenu/ServerPanel/BackButton" Type="TaharezLook/Button">
+					<Property Name="UnifiedAreaRect" Value="{{0,0},{0.8,0},{0.3,0},{0.95,0}}" />
+					<Property Name="Text" Value="@general.back" />
+					<Property Name="HorizontalAlignment" Value="Centre" />
+					<Event Name="Clicked" Function="mainmenu_multi_hide" />
+				</Window>
+				<Window Name="MainMenu/ServerPanel/PortLabel" Type="TaharezLook/StaticText">
+					<Property Name="UnifiedAreaRect" Value="{{-0.3,0},{0.2,0},{0,0},{0.35,0}}" />
+					<Property Name="Text" Value="@multi.server.port" />
+					<Property Name="UnifiedMaxSize" Value="{{1,0},{1,0}}" />
+					<Property Name="FrameEnabled" Value="False" />
+					<Property Name="BackgroundEnabled" Value="False" />
+					<Property Name="HorizontalAlignment" Value="Centre" />
+				</Window>
+			</Window>
+			<Window Name="MainMenu/ClientPanel" Type="DefaultWindow">
+				<Property Name="UnifiedAreaRect" Value="{{0,0},{0,0},{1,0},{1,0}}" />
+				<Property Name="Text" Value="@multi.client.title" />
+				<Property Name="UnifiedMaxSize" Value="{{1,0},{1,0}}" />
+				<Window Name="MainMenu/ClientPanel/ServerUrl" Type="TaharezLook/Editbox">
+					<Property Name="UnifiedAreaRect" Value="{{0.15,0},{0.1,0},{0.75,0},{0.25,0}}" />
+					<Property Name="Text" Value="localhost" />
+					<Property Name="HorizontalAlignment" Value="Centre" />
+				</Window>
+				<Window Name="MainMenu/ClientPanel/Port" Type="TaharezLook/Spinner">
+					<Property Name="UnifiedAreaRect" Value="{{0.15,0},{0.3,0},{0.75,0},{0.45,0}}" />
+					<Property Name="Text" Value="23343" />
+					<Property Name="HorizontalAlignment" Value="Centre" />
+					<AutoWindow NameSuffix="__auto_editbox__">
+						<Property Name="Text" Value="23343" />
+						<Property Name="ValidationString" Value="-?\d*" />
+					</AutoWindow>
+					<AutoWindow NameSuffix="__auto_incbtn__">
+						<Property Name="WantsMultiClickEvents" Value="False" />
+						<Property Name="MouseButtonDownAutoRepeat" Value="True" />
+					</AutoWindow>
+					<AutoWindow NameSuffix="__auto_decbtn__">
+						<Property Name="WantsMultiClickEvents" Value="False" />
+						<Property Name="MouseButtonDownAutoRepeat" Value="True" />
+					</AutoWindow>
+				</Window>
+				<Window Name="MainMenu/ClientPanel/StartButton" Type="TaharezLook/Button">
+					<Property Name="UnifiedAreaRect" Value="{{0,0},{0.5,0},{0.5,0},{0.75,0}}" />
+					<Property Name="Text" Value="@multi.client.start" />
+					<Property Name="HorizontalAlignment" Value="Centre" />
+					<Event Name="Clicked" Function="mainmenu_client_start_clicked" />
+				</Window>
+				<Window Name="MainMenu/ClientPanel/BackButton" Type="TaharezLook/Button">
+					<Property Name="UnifiedAreaRect" Value="{{0,0},{0.8,0},{0.3,0},{0.95,0}}" />
+					<Property Name="Text" Value="@general.back" />
+					<Property Name="HorizontalAlignment" Value="Centre" />
+					<Event Name="Clicked" Function="mainmenu_multi_hide" />
+				</Window>
+				<Window Name="MainMenu/ClientPanel/ClientUrlLabel" Type="TaharezLook/StaticText">
+					<Property Name="UnifiedAreaRect" Value="{{-0.3,0},{0.1,0},{0,0},{0.25,0}}" />
+					<Property Name="Text" Value="@multi.client.url" />
+					<Property Name="UnifiedMaxSize" Value="{{1,0},{1,0}}" />
+					<Property Name="FrameEnabled" Value="False" />
+					<Property Name="BackgroundEnabled" Value="False" />
+					<Property Name="HorizontalAlignment" Value="Centre" />
+				</Window>
+				<Window Name="MainMenu/ClientPanel/ClientPortLabel" Type="TaharezLook/StaticText">
+					<Property Name="UnifiedAreaRect" Value="{{-0.3,0},{0.3,0},{0,0},{0.45,0}}" />
+					<Property Name="Text" Value="@multi.client.port" />
+					<Property Name="UnifiedMaxSize" Value="{{1,0},{1,0}}" />
+					<Property Name="FrameEnabled" Value="False" />
+					<Property Name="BackgroundEnabled" Value="False" />
+					<Property Name="HorizontalAlignment" Value="Centre" />
+				</Window>
+			</Window>
+		</Window>
+
+		<Window Name="MainMenu/ServerWaiting" Type="TaharezLook/FrameWindow">
+			<Property Name="UnifiedAreaRect" Value="{{0.0,0},{0.0,0},{0.3,0},{0.2,0}}" />
+			<Property Name="HorizontalAlignment" Value="Centre" />
+			<Property Name="VerticalAlignment" Value="Centre" />
+			<Property Name="CloseButtonEnabled" Value="False" />
+			<Property Name="Visible" Value="False" />
+			<Property Name="Text" Value="@multi.server.waitingtitle" />
+			<Window Name="MainMenu/ServerWaiting/Progress" Type="TaharezLook/ProgressBar">
+				<Property Name="UnifiedAreaRect" Value="{{0,0},{0.2,0},{0.9,0},{0.5,0}}" />
+				<Property Name="UnifiedMaxSize" Value="{{1,0},{1,0}}" />
+				<Property Name="CurrentProgress" Value="0.5" />
+				<Property Name="HorizontalAlignment" Value="Centre" />
+			</Window>
+			<Window Name="MainMenu/ServerWaiting/CancelButton" Type="TaharezLook/Button">
+				<Property Name="UnifiedAreaRect" Value="{{0,0},{0.6,0},{0.8,0},{0.9,0}}" />
+				<Property Name="Text" Value="@general.cancel" />
+				<Property Name="HorizontalAlignment" Value="Centre" />
+				<Event Name="Clicked" Function="mainmenu_server_cancel_clicked" />
+			</Window>
+		</Window>
+		<Window Name="MainMenu/ClientWaiting" Type="TaharezLook/FrameWindow">
+			<Property Name="UnifiedAreaRect" Value="{{0.0,0},{0.0,0},{0.3,0},{0.2,0}}" />
+			<Property Name="HorizontalAlignment" Value="Centre" />
+			<Property Name="VerticalAlignment" Value="Centre" />
+			<Property Name="CloseButtonEnabled" Value="False" />
+			<Property Name="Visible" Value="False" />
+			<Property Name="Text" Value="@multi.client.waitingtitle" />
+			<Window Name="MainMenu/ClientWaiting/Progress" Type="TaharezLook/ProgressBar">
+				<Property Name="UnifiedAreaRect" Value="{{0,0},{0.2,0},{0.9,0},{0.5,0}}" />
+				<Property Name="UnifiedMaxSize" Value="{{1,0},{1,0}}" />
+				<Property Name="CurrentProgress" Value="0.5" />
+				<Property Name="HorizontalAlignment" Value="Centre" />
+			</Window>
+			<Window Name="MainMenu/ClientWaiting/CancelButton" Type="TaharezLook/Button">
+				<Property Name="UnifiedAreaRect" Value="{{0,0},{0.6,0},{0.8,0},{0.9,0}}" />
+				<Property Name="Text" Value="@general.cancel" />
+				<Property Name="HorizontalAlignment" Value="Centre" />
+				<Event Name="Clicked" Function="mainmenu_client_cancel_clicked" />
+			</Window>
+		</Window>
+	</Window>
+</GUILayout>

@@ -1,0 +1,5 @@
+<?xml version="1.0" ?>
+<Imageset AutoScaled="true" Imagefile="LibLogos.png" Name="LibLogos" NativeHorzRes="1280" NativeVertRes="800">
+    <Image Height="128" Name="CeguiLogo" Width="128" XPos="0" YPos="0" />
+    <Image Height="128" Name="OgreLogo" Width="128" XPos="128" YPos="0" />
+</Imageset>

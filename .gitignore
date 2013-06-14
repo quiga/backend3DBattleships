@@ -1,0 +1,13 @@
+# Binary
+bin/
+Debug/
+Release/
+*.exe
+*.o
+# Logs
+*.log
+# Config
+config/ogre.cfg
+# Eclipse stuff
+.project
+.cproject
