@@ -18,13 +18,35 @@ using namespace Ogre;
 using namespace CEGUI;
 
 GameState::GameState(sf::Socket* connectedPlayerSocket) :
-		OgreState("GameState"), mCamera(NULL), mCameraNode(NULL), mNetPlayerSocket(connectedPlayerSocket)
+		OgreState("GameState"), mCamera(NULL), mCameraNode(NULL), mNetPlayerSocket(connectedPlayerSocket), mShipyard(mSceneManager), mShip(NULL)
 {
 	// Create light
 	Light* l = mSceneManager->createLight("MainLight");
 	l->setPosition(1, 3, 4);
 	// Skybox
 	mSceneManager->setSkyBox(true, "Astrowar/SpaceSkyBox");
+	// Orientations
+	size_t numOfO = 0;
+	for (float angle1 = 0.0f; angle1 < 360.0f; angle1 += 90.0f)
+	{
+		for (float angle2 = 0.0f; angle2 < 360.0f; angle2 += 90.0f)
+		{
+			cout << "GenO#" << numOfO++ << ": " << angle1 << " " << angle2 << endl;
+			Ogre::Quaternion q = Ogre::Quaternion(Radian(Degree(angle1)), Ogre::Vector3::UNIT_Y)
+					* Ogre::Quaternion(Radian(Degree(angle2)), Ogre::Vector3::UNIT_Z);
+			mOrientations.push_back(q);
+		}
+	}
+	for (float angle1 = 90.0f; angle1 >= -90.0f; angle1 -= 180.0f)
+	{
+		for (float angle2 = 0.0f; angle2 < 360.0f; angle2 += 90.0f)
+		{
+			cout << "GenO#" << numOfO++ << ": " << angle1 << " " << angle2 << endl;
+			Ogre::Quaternion q = Ogre::Quaternion(Radian(Degree(angle1)), Ogre::Vector3::UNIT_X)
+					* Ogre::Quaternion(Radian(Degree(angle2)), Ogre::Vector3::UNIT_Z);
+			mOrientations.push_back(q);
+		}
+	}
 }
 
 GameState::~GameState()
@@ -55,15 +77,38 @@ void GameState::onActivate()
 	mCameraNode = mSceneManager->getRootSceneNode()->createChildSceneNode("Camera Node");
 	mCameraNode->attachObject(mCamera);
 	// Create grids
-	size_t dim = 5;
+	size_t dim = 8;
 	std::vector<size_t> dimensions = { dim, dim, dim };
 	gridA.reset(new Grid3D(mSceneManager, mCamera, dimensions, ColourValue(0.8, 0.3, 0.1, 0.5)));
+	gridB.reset(new Grid3D(mSceneManager, mCamera, dimensions, ColourValue(0.8, 0.3, 0.1, 0.5)));
 	size_t maxDimension = 0;
 	for (auto d : dimensions)
 		if (d > maxDimension) maxDimension = d;
 	float scale = 1.0f / maxDimension;
 	gridA->getNode()->setScale(scale, scale, scale);
-	mCoordinator.connectToGrids(gridA.get(), NULL);
+	gridB->getNode()->setScale(scale, scale, scale);
+	mCoordinator.connectToGrids(gridA.get(), gridB.get());
+//	gridB->getNode()->translate(3, 0, 0);
+	// Init shipyard
+	mShipyard.registerShipType("Destroyer", { "Destroyer.mesh" });
+	mShipyard.registerShipType("Cruiser", { "Cruiser.mesh" });
+	mShipyard.registerShipType("Battleship", { "Battleship.mesh" });
+	mShipyard.registerShipType("Station", { "Station.mesh" });
+	mShipyard.registerShipType("Carrier", { "Carrier.mesh" });
+
+	auto ship = mShipyard.createShip("Carrier", gridA->getNode());
+	ship->getNode()->setPosition(gridA->coords2position( { 0, 0, 0 }));
+	ship = mShipyard.createShip("Cruiser", gridA->getNode());
+	ship->getNode()->setPosition(gridA->coords2position( { 4, 1, 0 }));
+	ship = mShipyard.createShip("Battleship", gridA->getNode());
+	ship->getNode()->setPosition(gridA->coords2position( { 3, 2, 4 }));
+	ship = mShipyard.createShip("Station", gridA->getNode());
+	ship->getNode()->setPosition(gridA->coords2position( { 7, 6, 5 }));
+
+	mShip = mShipyard.createShip("Carrier", gridB->getNode());
+	mShip->getNode()->setPosition(gridB->coords2position( { 3, 3, 3 }));
+
+	gridB->getNode()->setVisible(false);
 	// Add to listeners
 	OisFrameworkSingleton.addMouseListener(this);
 	OisFrameworkSingleton.addKeyListener(this);
@@ -73,15 +118,21 @@ void GameState::onActivate()
 	// Fire Button
 	CEGUI::PushButton* fireButton = static_cast<CEGUI::PushButton*>(guiSys.getGUISheet()->getChildRecursive("Game/Control/FireButton"));
 	if (fireButton) fireButton->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&GameCoordinator::handleFireButton, &mCoordinator));
+	// Ship list
+	CEGUI::MultiColumnList* shipList1 = static_cast<CEGUI::MultiColumnList*>(guiSys.getGUISheet()->getChildRecursive("Game/Player1Panel/ShipList"));
+	if (shipList1)
+	{
+		mCoordinator.connectToShipLists(shipList1, NULL);
+	}
 }
 
 void GameState::onDeactivate()
 {
-	cout << "Deactivate game" << endl;
 	// Destroy
 	mSceneManager->destroySceneNode(mCameraNode);
 	// Destroy Grids
 	gridA.reset();
+	gridB.reset();
 	// Remove from listeners
 	OisFrameworkSingleton.removeMouseListener(this);
 	OisFrameworkSingleton.removeKeyListener(this);
@@ -95,7 +146,8 @@ void GameState::onDeactivate()
 
 bool GameState::frameRenderingQueued(const Ogre::FrameEvent& evt)
 {
-	gridA->handleInput(OisFrameworkSingleton.getKeyboard(), OisFrameworkSingleton.getMouse(), evt.timeSinceLastFrame);
+	gridA->update(evt.timeSinceLastFrame);
+	gridB->update(evt.timeSinceLastFrame);
 	return true;
 }
 
@@ -122,6 +174,15 @@ bool GameState::mouseReleased(const OIS::MouseEvent &arg, OIS::MouseButtonID id)
 
 bool GameState::keyPressed(const OIS::KeyEvent &arg)
 {
+	if (arg.key == OIS::KC_SPACE)
+	{
+		toggleGrids();
+	}
+	static size_t orient_index = 0;
+	if (orient_index > 0 && arg.key == OIS::KC_LEFT) orient_index--;
+	if (orient_index < 23 && arg.key == OIS::KC_RIGHT) orient_index++;
+	cout << "New orientation index: " << orient_index << ", Orientation: " << endl;
+	mShip->getNode()->setOrientation(mOrientations[orient_index]);
 	return true;
 }
 
@@ -135,4 +196,14 @@ bool GameState::backButtonHandler(const CEGUI::EventArgs& arg)
 {
 	popState();
 	return true;
+}
+
+// Toggle grids
+void GameState::toggleGrids()
+{
+//	Ogre::Vector3 tmp = gridA->getNode()->getPosition();
+//	gridA->getNode()->setPosition(gridB->getNode()->getPosition());
+	gridA->getNode()->flipVisibility();
+//	gridB->getNode()->setPosition(tmp);
+	gridB->getNode()->flipVisibility();
 }

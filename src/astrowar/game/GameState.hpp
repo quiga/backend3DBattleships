@@ -12,12 +12,15 @@
 // Tools
 #include "../../graphics/Ogre/OgreState.hpp"
 // Game
-#include "Grid3D.hpp"
+#include "grid/Grid3D.hpp"
 #include "GameCoordinator.hpp"
+#include "shipyard/Shipyard.hpp"
 // Network
 #include <SFML/Network.hpp>
 // CEGUI
 #include <CEGUI/CEGUI.h>
+// STD
+#include <vector>
 
 class GameState: public OgreState, public OIS::MouseListener, public OIS::KeyListener
 {
@@ -39,8 +42,10 @@ protected:
 	bool keyReleased(const OIS::KeyEvent &arg);
 	// CEGUI handlers
 	bool backButtonHandler(const CEGUI::EventArgs& arg);
+	// Toggle grids
+	void toggleGrids();
 	// Torpedo
-	std::shared_ptr<Grid3D> gridA;
+	std::shared_ptr<Grid3D> gridA, gridB;
 	// Camera
 	Ogre::Camera* mCamera;
 	Ogre::SceneNode* mCameraNode;
@@ -48,6 +53,12 @@ protected:
 	sf::Socket* mNetPlayerSocket;
 	// Game coordinator
 	GameCoordinator mCoordinator;
+	// Shipyard
+	Shipyard mShipyard;
+
+	// TMP
+	std::vector<Ogre::Quaternion> mOrientations;
+	ShipHull* mShip;
 };
 
 #endif /* GAMESTATE_HPP_ */

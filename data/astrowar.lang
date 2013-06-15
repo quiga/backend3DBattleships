@@ -4,6 +4,7 @@ main.title	AstrOWar	AstrOWar
 main.helloworld	Hello World!	Szevasz világ!
 general.cancel	Cancel	Mégse
 general.back	Back	Vissza
+general.?	???	???
 mainmenu.singleplayer	Singleplayer	Egyjátékos
 mainmenu.multiplayer	Multiplayer	Többjátékos
 mainmenu.credits	Credits	Kreditlista
@@ -23,3 +24,5 @@ multi.server.waitingtitle	Waiting for client	Várakozás a kliensre
 multi.client.waitingtitle	Connecting to server	Csatlakozás a szervezhez
 game.menu.title	Menu	Menü
 game.control.fire	Fire	Tűz
+game.ships.name	Ships	Hajók
+game.ships.quantity	q	db

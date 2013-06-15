@@ -36,9 +36,6 @@
 			<Property Name="UnifiedAreaRect" Value="{{0,0},{0,0},{0.9,0},{0.9,0}}" />
 			<Property Name="Visible" Value="False" />
 			<Property Name="AlwaysOnTop" Value="True" />
-			<Property Name="RollUpEnabled" Value="False" />
-			<Property Name="SizingEnabled" Value="False" />
-			<Property Name="DragMovingEnabled" Value="False" />
 			<Property Name="VerticalAlignment" Value="Centre" />
 			<Property Name="HorizontalAlignment" Value="Centre" />
 			<Window Name="MainMenu/Credits/BackButton" Type="TaharezLook/Button">
@@ -232,7 +229,6 @@
 			<Property Name="UnifiedAreaRect" Value="{{0.0,0},{0.0,0},{0.3,0},{0.2,0}}" />
 			<Property Name="HorizontalAlignment" Value="Centre" />
 			<Property Name="VerticalAlignment" Value="Centre" />
-			<Property Name="CloseButtonEnabled" Value="False" />
 			<Property Name="Visible" Value="False" />
 			<!-- <Property Name="Text" Value="@multi.server.waitingtitle" /> -->
 			<Window Name="MainMenu/ServerWaiting/Progress" Type="TaharezLook/ProgressBar">
@@ -252,7 +248,6 @@
 			<Property Name="UnifiedAreaRect" Value="{{0.0,0},{0.0,0},{0.3,0},{0.2,0}}" />
 			<Property Name="HorizontalAlignment" Value="Centre" />
 			<Property Name="VerticalAlignment" Value="Centre" />
-			<Property Name="CloseButtonEnabled" Value="False" />
 			<Property Name="Visible" Value="False" />
 			<!-- <Property Name="Text" Value="@multi.client.waitingtitle" /> -->
 			<Window Name="MainMenu/ClientWaiting/Progress" Type="TaharezLook/ProgressBar">

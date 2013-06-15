@@ -1,49 +1,69 @@
 <?xml version="1.0" ?>
 <GUILayout>
+	<!-- Canvas -->
 	<Window Name="Game" Type="DefaultWindow">
 		<Property Name="UnifiedPosition" Value="{{0,0},{0,0}}" />
 		<Property Name="UnifiedSize" Value="{{1,0},{1,0}}" />
+		<!-- Menu -->
 		<Window Name="Game/Menu" Type="TaharezLook/StaticText">
 			<Property Name="UnifiedPosition" Value="{{0,0},{0.93,0}}" />
 			<Property Name="UnifiedSize" Value="{{0.2,0},{0.2,0}}" />
 			<Property Name="AlwaysOnTop" Value="True" />
+			<!-- Menu title -->
 			<Window Name="Game/Menu/TitleLabel" Type="TaharezLook/StaticText">
 				<Property Name="UnifiedPosition" Value="{{0,0},{0,0}}" />
 				<Property Name="UnifiedSize" Value="{{1,0},{0.35,0}}" />
 				<Property Name="Text" Value="@game.menu.title" />
 			</Window>
+			<!-- ? Button -->
 			<Window Name="Game/Menu/?Button" Type="TaharezLook/Button">
 				<Property Name="UnifiedPosition" Value="{{0.04,0},{0.4,0}}" />
 				<Property Name="UnifiedSize" Value="{{0.92,0},{0.24,0}}" />
 				<Property Name="Text" Value="@general.?" />
 			</Window>
+			<!-- Back button -->
 			<Window Name="Game/Menu/BackButton" Type="TaharezLook/Button">
 				<Property Name="UnifiedPosition" Value="{{0.04,0},{0.71,0}}" />
 				<Property Name="UnifiedSize" Value="{{0.92,0},{0.24,0}}" />
 				<Property Name="Text" Value="@general.back" />
 			</Window>
 		</Window>
+		<!-- Panel for player 1 -->
 		<Window Name="Game/Player1Panel" Type="TaharezLook/StaticText">
 			<Property Name="UnifiedPosition" Value="{{0,10},{0,10}}" />
 			<Property Name="UnifiedSize" Value="{{0.2,0},{0.4,0}}" />
-			<Window Name="Game/Panel1Panel/NameLabel" Type="TaharezLook/StaticText">
+			<!-- Player 1 Name Label -->
+			<Window Name="Game/Player1Panel/NameLabel" Type="TaharezLook/StaticText">
 				<Property Name="UnifiedPosition" Value="{{0,0},{0,0}}" />
 				<Property Name="UnifiedSize" Value="{{1,0},{0.1,0}}" />
 				<Property Name="Text" Value="PLAYER NAME A" />
 			</Window>
+			<!-- Player 1 Ship List -->
+			<Window Name="Game/Player1Panel/ShipList" Type="TaharezLook/MultiColumnList">
+				<Property Name="UnifiedPosition" Value="{{0,0},{0.1,0}}" />
+				<Property Name="UnifiedSize" Value="{{1,0},{0.9,0}}" />
+				<Property Name="Text" Value="@game.player.ships" />
+				<Property Name="MultiSelect" Value="false" />
+				<Property Name="ColumnsSizable" Value="false" />
+				<Property Name="ColumnsMovable" Value="false" />
+			</Window>
 		</Window>
+		<!-- Panel for player 2 -->
 		<Window Name="Game/Player2Panel" Type="TaharezLook/StaticText">
 			<Property Name="UnifiedPosition" Value="{{0.8,-10},{0,10}}" />
 			<Property Name="UnifiedSize" Value="{{0.2,0},{0.4,0}}" />
+			<!-- Player 2 Name Label -->
 			<Window Name="Game/Panel2Panel/NameLabel" Type="TaharezLook/StaticText">
 				<Property Name="UnifiedPosition" Value="{{0,0},{0,0}}" />
 				<Property Name="UnifiedSize" Value="{{1,0},{0.1,0}}" />
 				<Property Name="Text" Value="PLAYER NAME B" />
 			</Window>
 		</Window>
+		<!-- Panel for control buttons -->
 		<Window Name="Game/Control" Type="DefaultWindow">
 			<Property Name="UnifiedPosition" Value="{{0.8,-10},{0.84,-10}}" />
 			<Property Name="UnifiedSize" Value="{{0.2,0},{0.16,0}}" />
+			<!-- Fire button -->
 			<Window Name="Game/Control/FireButton" Type="TaharezLook/Button">
 				<Property Name="UnifiedPosition" Value="{{0,0},{0.5,0}}" />
 				<Property Name="UnifiedSize" Value="{{1,0},{0.5,0}}" />

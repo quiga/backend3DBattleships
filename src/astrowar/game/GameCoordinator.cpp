@@ -38,9 +38,9 @@ bool GameCoordinator::keyReleased(const OIS::KeyEvent &arg)
 	return true;
 }
 
-void GameCoordinator::onSelect(size_t x, size_t y, size_t z)
+void GameCoordinator::onSelect(Grid3D* grid, size_t x, size_t y, size_t z)
 {
-	cout << "Event on grid: [" << x << "," << y << "," << z << "]" << endl;
+	cout << "Event on " << grid->getNode()->getName() << ": [" << x << "," << y << "," << z << "]" << endl;
 }
 
 void GameCoordinator::connectToGrids(Grid3D* gridA, Grid3D* gridB)
@@ -48,7 +48,16 @@ void GameCoordinator::connectToGrids(Grid3D* gridA, Grid3D* gridB)
 	assert(gridA);
 	gridA->setGridListener(this);
 	mGridA = gridA;
+	assert(gridB);
+	gridB->setGridListener(this);
 	mGridB = gridB;
+}
+
+void GameCoordinator::connectToShipLists(CEGUI::MultiColumnList* shipListA, CEGUI::MultiColumnList* shipListB)
+{
+	mShipControllerA.setColumnList(shipListA);
+	mShipControllerA.setDataProvider(&mShipsDataProvider);
+	mShipControllerA.buildForSet();
 }
 
 // CEGUI handler
