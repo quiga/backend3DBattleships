@@ -100,10 +100,9 @@ bool GameControl::rotateShipPrev(ShipHull* ship)
 
 void GameControl::selectShip(ShipHull* ship)
 {
-	bool sameAsSelected = ship == mSelectedShip;
 	if (mSelectedShip) colorShip(mSelectedShip, SCLR_DEFAULT);
-	mSelectedShip = ship;
-	if (sameAsSelected && mSelectedShip) colorShip(mSelectedShip, SCLR_CYAN);
+	mSelectedShip = (ship == mSelectedShip ? NULL : ship);
+	if (mSelectedShip) colorShip(mSelectedShip, SCLR_CYAN);
 
 }
 
