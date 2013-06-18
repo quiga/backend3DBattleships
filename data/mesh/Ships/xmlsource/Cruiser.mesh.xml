@@ -55597,7 +55597,7 @@
         </vertexbuffer>
     </sharedgeometry>
     <submeshes>
-        <submesh operationtype="triangle_list" material="Flat" usesharedvertices="true" use32bitindexes="False">
+        <submesh material="HullG" operationtype="triangle_list" usesharedvertices="true" use32bitindexes="False">
             <faces count="12576">
                 <face v3="2" v2="1" v1="0"/>
                 <face v3="3" v2="2" v1="0"/>
@@ -68177,7 +68177,7 @@
                 <face v3="13891" v2="13892" v1="13674"/>
             </faces>
         </submesh>
-        <submesh operationtype="triangle_list" material="Glass" usesharedvertices="true" use32bitindexes="False">
+        <submesh material="Glass" operationtype="triangle_list" usesharedvertices="true" use32bitindexes="False">
             <faces count="72">
                 <face v3="10805" v2="10804" v1="10803"/>
                 <face v3="10806" v2="10805" v1="10803"/>
@@ -68255,7 +68255,7 @@
         </submesh>
     </submeshes>
     <submeshnames>
-        <submesh name="Flat" index="0">
+        <submesh name="HullG" index="0">
         </submesh>
         <submesh name="Glass" index="1">
         </submesh>

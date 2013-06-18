@@ -13,7 +13,8 @@
 #include "../../graphics/Ogre/OgreState.hpp"
 // Game
 #include "grid/Grid3D.hpp"
-#include "GameCoordinator.hpp"
+#include "control/GameCoordinator.hpp"
+#include "control/GameControlProvider.hpp"
 #include "shipyard/Shipyard.hpp"
 // Network
 #include <SFML/Network.hpp>
@@ -22,11 +23,13 @@
 // STD
 #include <vector>
 
-class GameState: public OgreState, public OIS::MouseListener, public OIS::KeyListener
+class GameState: public OgreState, public OIS::MouseListener, public OIS::KeyListener, public GameCoordinatorListener
 {
 public:
 	GameState(sf::Socket* connectedPlayerSocket = NULL);
 	virtual ~GameState();
+	// Notify if game changed
+	void notifyOnGameChange();
 protected:
 	// State
 	void onActivate();
@@ -42,7 +45,9 @@ protected:
 	bool keyReleased(const OIS::KeyEvent &arg);
 	// CEGUI handlers
 	bool backButtonHandler(const CEGUI::EventArgs& arg);
-	// Toggle grids
+	// Grid management
+	void onGridActivate(Grid3D* grid);
+	void onGridDeactivate(Grid3D* grid);
 	void toggleGrids();
 	// Torpedo
 	std::shared_ptr<Grid3D> gridA, gridB;
@@ -53,12 +58,8 @@ protected:
 	sf::Socket* mNetPlayerSocket;
 	// Game coordinator
 	GameCoordinator mCoordinator;
-	// Shipyard
-	Shipyard mShipyard;
-
-	// TMP
-	std::vector<Ogre::Quaternion> mOrientations;
-	ShipHull* mShip;
+	// Game State Provider
+	GameControlProvider* mControlProvider;
 };
 
 #endif /* GAMESTATE_HPP_ */

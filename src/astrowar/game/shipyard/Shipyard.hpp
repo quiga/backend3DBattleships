@@ -31,6 +31,8 @@ public:
 	void registerShipType(std::string shipTypeName, ShipTypeDescription shipTypeDescription);
 	ShipHull* createShip(std::string shipTypeName, Ogre::SceneNode* parentNode);
 	void destroyShip(ShipHull* ship);
+	// Ship get
+	ShipHull* getShip(Ogre::SceneNode* sceneNode);
 private:
 	std::map<std::string, ShipTypeDescription> mShipTypes;
 	std::vector<ShipHull*> mShips;

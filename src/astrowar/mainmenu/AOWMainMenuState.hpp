@@ -10,7 +10,7 @@
 
 #include "../../graphics/Ogre/OgreState.hpp"
 // STD
-#include <memory.h>
+#include <memory>
 #include <utility>
 // SFML
 #include <SFML/System.hpp>

@@ -53,7 +53,7 @@ void createGridOneDirection(Ogre::ManualObject* shape, Ogre::Vector3 a, Ogre::Ve
 }
 
 Grid3D::Grid3D(Ogre::SceneManager* scene_manager, Ogre::Camera* camera, std::vector<size_t> dimensions, Ogre::ColourValue colour) :
-		mSceneManager(scene_manager), mCamera(camera), mDimensions(dimensions), mGridListener(NULL)
+		mSceneManager(scene_manager), mCamera(camera), mDimensions(dimensions), isRightButton(false), mGridListener(NULL), mIsActive(false)
 {
 	// Assert if scene manager doesn't exist
 	assert(scene_manager != NULL);
@@ -93,6 +93,7 @@ Grid3D::Grid3D(Ogre::SceneManager* scene_manager, Ogre::Camera* camera, std::vec
 	OisFrameworkSingleton.addMouseListener(this);
 	// Create ray
 	mRayScnQuery = mSceneManager->createRayQuery(Ogre::Ray());
+	mRayScnQuery->setSortByDistance(true);
 	// Next ID
 	++sId;
 }
@@ -163,6 +164,7 @@ void Grid3D::markerStep(size_t direction, int numberOfSteps)
 
 bool Grid3D::keyPressed(const OIS::KeyEvent& keyEvent)
 {
+	if (!isActive()) return true;
 	if (keyEvent.key == OIS::KC_NUMPAD4 || keyEvent.key == OIS::KC_NUMPAD6) markerStep(0, keyEvent.key == OIS::KC_NUMPAD4 ? -1 : 1);
 	if (keyEvent.key == OIS::KC_NUMPAD9 || keyEvent.key == OIS::KC_NUMPAD3) markerStep(1, keyEvent.key == OIS::KC_NUMPAD3 ? -1 : 1);
 	if (keyEvent.key == OIS::KC_NUMPAD8 || keyEvent.key == OIS::KC_NUMPAD2) markerStep(2, keyEvent.key == OIS::KC_NUMPAD8 ? -1 : 1);
@@ -182,13 +184,56 @@ bool Grid3D::mouseMoved(const OIS::MouseEvent &arg)
 
 bool Grid3D::mousePressed(const OIS::MouseEvent &arg, OIS::MouseButtonID id)
 {
-	if (id == OIS::MouseButtonID::MB_Left)
+	if (isActive() && (id == OIS::MouseButtonID::MB_Left || id == OIS::MouseButtonID::MB_Right))
 	{
+		isRightButton = id == OIS::MouseButtonID::MB_Right;
 		mMouseRay = mCamera->getCameraToViewportRay(arg.state.X.abs / (float) arg.state.width, arg.state.Y.abs / (float) arg.state.height);
 		mRayScnQuery->setRay(mMouseRay);
-		mRayScnQuery->execute(this);
-	}
+		mRayScnQuery->setSortByDistance(true);
+		auto& rayResults = mRayScnQuery->execute();
+		for (auto result : rayResults)
+		{
+			if (result.movable)
+			{
+				if (isRightButton)
+				{
+					auto sceneNode = result.movable->getParentSceneNode();
+					if (sceneNode->getName()[0] == 'S')
+					{
+						cout << sceneNode->getName() << " " << result.distance << endl;
+						mGridListener->onNodeSearch(sceneNode);
+						break;
+					}
+				}
+				else
+				{
+					if (result.movable->getName() == mGridShape->getName())
+					{
+						// Intersection of the ray and the grid
+						auto vec = mMouseRay.getPoint(result.distance) - mSceneNode->getPosition();
+						// Some normalization - all to => [-1;1]
+						vec.x /= mDimensions[0] * mSceneNode->getScale().x / 2;
+						vec.y /= mDimensions[1] * mSceneNode->getScale().y / 2;
+						vec.z /= mDimensions[2] * mSceneNode->getScale().z / 2;
+						// Convert to a vector
+						std::vector<float> point = { vec.x, vec.y, vec.z };
+						// Determine the clicked side
+						size_t side = 0;
+						for (size_t i = 0; i < point.size(); ++i)
+							if (fabsf(point[i]) > fabsf(point[side])) side = i;
+						// Calc the new coordinates
+						for (size_t i = 0; i < point.size(); ++i)
+						{
+							if (i == side) continue;
+							size_t coord = mDimensions[i] * (point[i] + 1) / 2;
+							markerStepTo(i, coord);
+						}
+					}
+				}
+			}
+		}
 
+	}
 	return true;
 }
 
@@ -199,26 +244,37 @@ bool Grid3D::mouseReleased(const OIS::MouseEvent &arg, OIS::MouseButtonID id)
 
 bool Grid3D::queryResult(Ogre::MovableObject* obj, Ogre::Real distance)
 {
-	if (obj->getName() == mGridShape->getName())
+	if (isRightButton)
 	{
-		// Intersection of the ray and the grid
-		auto vec = mMouseRay.getPoint(distance) - mSceneNode->getPosition();
-		// Some normalization - all to => [-1;1]
-		vec.x /= mDimensions[0] * mSceneNode->getScale().x / 2;
-		vec.y /= mDimensions[1] * mSceneNode->getScale().y / 2;
-		vec.z /= mDimensions[2] * mSceneNode->getScale().z / 2;
-		// Convert to a vector
-		std::vector<float> point = { vec.x, vec.y, vec.z };
-		// Determine the clicked side
-		size_t side = 0;
-		for (size_t i = 0; i < point.size(); ++i)
-			if (fabsf(point[i]) > fabsf(point[side])) side = i;
-		// Calc the new coordinates
-		for (size_t i = 0; i < point.size(); ++i)
+		auto sceneNode = obj->getParentSceneNode();
+		if (sceneNode->getName()[0] == 'S')
 		{
-			if (i == side) continue;
-			size_t coord = mDimensions[i] * (point[i] + 1) / 2;
-			markerStepTo(i, coord);
+			cout << sceneNode->getName() << " " << distance << endl;
+		}
+	}
+	else
+	{
+		if (obj->getName() == mGridShape->getName())
+		{
+			// Intersection of the ray and the grid
+			auto vec = mMouseRay.getPoint(distance) - mSceneNode->getPosition();
+			// Some normalization - all to => [-1;1]
+			vec.x /= mDimensions[0] * mSceneNode->getScale().x / 2;
+			vec.y /= mDimensions[1] * mSceneNode->getScale().y / 2;
+			vec.z /= mDimensions[2] * mSceneNode->getScale().z / 2;
+			// Convert to a vector
+			std::vector<float> point = { vec.x, vec.y, vec.z };
+			// Determine the clicked side
+			size_t side = 0;
+			for (size_t i = 0; i < point.size(); ++i)
+				if (fabsf(point[i]) > fabsf(point[side])) side = i;
+			// Calc the new coordinates
+			for (size_t i = 0; i < point.size(); ++i)
+			{
+				if (i == side) continue;
+				size_t coord = mDimensions[i] * (point[i] + 1) / 2;
+				markerStepTo(i, coord);
+			}
 		}
 	}
 
@@ -260,4 +316,25 @@ void Grid3D::showMarker()
 void Grid3D::hideMarker()
 {
 	setMarkerVisible(false);
+}
+
+// Activate
+bool Grid3D::isActive() const
+{
+	return mIsActive;
+}
+
+void Grid3D::setActive(bool isActive)
+{
+	mIsActive = isActive;
+}
+
+void Grid3D::activate()
+{
+	setActive(true);
+}
+
+void Grid3D::deactivate()
+{
+	setActive(false);
 }

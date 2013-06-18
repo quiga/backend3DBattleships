@@ -55,3 +55,10 @@ void Shipyard::destroyShip(ShipHull* ship)
 	auto fintIt = std::find(mShips.begin(), mShips.end(), ship);
 	if (fintIt != mShips.end()) mShips.erase(fintIt);
 }
+
+ShipHull* Shipyard::getShip(Ogre::SceneNode* sceneNode)
+{
+	for (auto ship : mShips)
+		if (ship->getNode() == sceneNode) return ship;
+	return NULL;
+}

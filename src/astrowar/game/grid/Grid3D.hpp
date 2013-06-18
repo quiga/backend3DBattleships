@@ -25,6 +25,7 @@ public:
 	virtual ~Grid3DListener();
 	// Listener functions
 	virtual void onSelect(Grid3D* grid, size_t x, size_t y, size_t z) = 0;
+	virtual void onNodeSearch(Ogre::SceneNode* foundNode) = 0;
 };
 
 class Grid3D: public OIS::KeyListener, public OIS::MouseListener, public Ogre::RaySceneQueryListener
@@ -63,6 +64,11 @@ public:
 	void setMarkerVisible(const bool visible);
 	void showMarker();
 	void hideMarker();
+	// Activate
+	bool isActive() const;
+	void setActive(bool isActive);
+	void activate();
+	void deactivate();
 protected:
 	// Reference to the scene manager and camera
 	Ogre::SceneManager* mSceneManager;
@@ -80,8 +86,11 @@ protected:
 	// Ray scene query
 	Ogre::Ray mMouseRay;
 	Ogre::RaySceneQuery* mRayScnQuery;
+	bool isRightButton;
 	// Listener
 	Grid3DListener* mGridListener;
+	// Active
+	bool mIsActive;
 };
 
 #endif /* GRID3D_HPP_ */

@@ -88,6 +88,10 @@ void AOWMainMenuState::onActivate()
 		cout << propIt.getCurrentKey() << endl;
 		propIt++;
 	}
+
+	// Start single
+	mShouldStartGame = true;
+	mSocketConnected = false;
 }
 
 void AOWMainMenuState::onDeactivate()
