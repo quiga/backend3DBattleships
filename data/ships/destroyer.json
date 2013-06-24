@@ -1,0 +1,10 @@
+{
+	"name" : "Destroyer",
+	"size" : {
+		"x" : 1,
+		"y" : 1,
+		"z" : 2
+	},
+	"structure" : [1,1],
+	"mesh" : "Destroyer.mesh"
+}
