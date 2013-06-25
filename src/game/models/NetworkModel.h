@@ -1,51 +1,50 @@
 /*
- * network.h
+ * NetworkModel.h
  *
  *  Created on: 2013.06.23.
  *      Author: quiga
  */
 
-#ifndef NETWORK_H_
-#define NETWORK_H_
+#ifndef NetworkModel_H_
+#define NetworkModel_H_
 
 #include "SFML/Network.hpp"
 #include "SFML/System.hpp"
 #include <memory>
 #include <iostream>
 #include <vector>
-//#include "../client/gameModel.h"
 
 using namespace sf;
 
 namespace AstrOWar {
 
-class gameModel;
+class GameModel;
 
-class network{
+class NetworkModel {
 public:
-
-	static network& getSingleton();
+	NetworkModel(GameModel *g);
+	virtual ~NetworkModel();
 
 	void startAsServer(unsigned short port);
 	void startAsClient(std::string address, unsigned short port);
 
-	bool isEnableConnection(){return mSocketConnected;}
+	bool isEnableConnection() {
+		return mSocketConnected;
+	}
 
 	void sendMessage(std::string msg);
-	void registerMessageEventHandler(void (*cb)(std::string));
+	void registerMessageEventHandler(void (GameModel::*cb)(std::string));
 	bool isServer();
 
 private:
-	network();
-	virtual ~network();
 	void init();
 	void run();
 
 	void listenForClient();
 	void connectToServer();
 	std::string reciveMessage();
-
-	std::shared_ptr<sf::Thread> mNetworkThread;
+	GameModel* gm;
+	std::shared_ptr<sf::Thread> mNetworkModelThread;
 
 	bool mThreadShouldEnd;
 	bool mSocketConnected;
@@ -57,11 +56,9 @@ private:
 
 	sf::Thread reciverThread;
 	bool isListenReciver;
-
-	void (*getMessage)(std::string);
+	void (GameModel::*getMessage)(std::string);
 
 };
-extern network& NetworkSingleton;
 } /* namespace AstrOWar */
 
-#endif /* NETWORK_H_ */
+#endif /* NetworkModel_H_ */

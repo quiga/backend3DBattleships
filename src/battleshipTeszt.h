@@ -8,8 +8,8 @@
 #ifndef BATTLESHIPTESZT_H_
 #define BATTLESHIPTESZT_H_
 
-#include "game/client/gameModel.h"
-#include "game/server/network.h"
+#include "game/models/GameModel.h"
+#include "game/models/NetworkModel.h"
 
 #include <iostream>
 

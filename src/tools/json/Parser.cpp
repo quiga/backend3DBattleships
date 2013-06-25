@@ -106,8 +106,8 @@ int Parser::parse(std::string path, std::vector<AstrOWar::Ship> *ships) {
 	return code;
 }
 
-AstrOWar::message Parser::decode(std::string json) {
-	AstrOWar::message msg;
+AstrOWar::Message Parser::decode(std::string json) {
+	AstrOWar::Message msg;
 
 	json_t* Root = json_loads(json.c_str(), 0, &error);
 	if (Root) {
@@ -138,7 +138,7 @@ AstrOWar::message Parser::decode(std::string json) {
 	return msg;
 }
 
-std::string Parser::encode(AstrOWar::message msg) {
+std::string Parser::encode(AstrOWar::Message msg) {
 	json_t *Root, *pos;
 
 	Root = json_object();

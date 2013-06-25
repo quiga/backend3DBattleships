@@ -13,7 +13,7 @@
 using namespace std;
 
 namespace AstrOWar {
-class field;
+class Field;
 
 class Ship {
 protected:
@@ -21,7 +21,7 @@ protected:
 	int x, y, z;		// mátrix segédek
 	std::string mesh;
 	std::vector<std::vector<int> > structure;
-	std::vector<field*> mezok;
+	std::vector<Field*> mezok;
 	Ship* _clone(Ship *s);
 
 public:
@@ -34,7 +34,7 @@ public:
 	void setZ(int i);
 	void setMesh(std::string str);
 	void setStructure(vector<vector<int> > v);
-	void addField(field* f);
+	void addField(Field* f);
 
 	vector<vector<int> > getStructure();
 	std::string getName();

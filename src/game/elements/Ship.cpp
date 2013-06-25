@@ -78,7 +78,7 @@ void Ship::toString() {
 	}
 }
 
-void Ship::addField(field* f) {
+void Ship::addField(Field* f) {
 	mezok.push_back(f);
 }
 

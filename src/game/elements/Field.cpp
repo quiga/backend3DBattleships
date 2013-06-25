@@ -1,15 +1,15 @@
 /*
- * field.cpp
+ * Field.cpp
  *
  *  Created on: 2013.06.22.
  *      Author: quiga
  */
 
-#include "field.h"
+#include "Field.h"
 
 namespace AstrOWar {
 
-field::field(int x, int y, int z) {
+Field::Field(int x, int y, int z) {
 	posX = x;
 	posY = y;
 	posZ = z;
@@ -17,42 +17,42 @@ field::field(int x, int y, int z) {
 	hajo = nullptr;
 }
 
-field::~field() {
+Field::~Field() {
 }
 
-void field::setShip(Ship *s) {
+void Field::setShip(Ship *s) {
 	hajo = s;
 }
 
-std::string field::toString() {
+std::string Field::toString() {
 	return (hajo == nullptr) ? "0" : "1";
 }
 
-Ship* field::getHajo() {
+Ship* Field::getHajo() {
 	return hajo;
 }
 
-void field::setHajo(Ship* hajo) {
+void Field::setHajo(Ship* hajo) {
 	this->hajo = hajo;
 }
 
-bool field::IsDisruptive() const {
+bool Field::IsDisruptive() const {
 	return isDisruptive;
 }
 
-void field::setDisruptive(bool isDisruptive) {
+void Field::setDisruptive(bool isDisruptive) {
 	this->isDisruptive = isDisruptive;
 }
 
-int field::getPosX() const {
+int Field::getPosX() const {
 	return posX;
 }
 
-int field::getPosY() const {
+int Field::getPosY() const {
 	return posY;
 }
 
-int field::getPosZ() const {
+int Field::getPosZ() const {
 	return posZ;
 }
 

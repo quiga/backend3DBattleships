@@ -8,7 +8,8 @@
 
 #include <iostream>
 using namespace std;
-#include "battleshipTeszt.h"
+//#include "battleshipTeszt.h"
+#include "game/models/GameModel.h"
 
 const unsigned short port = 50003;
 const std::string address = "127.0.0.1";
@@ -21,6 +22,10 @@ const std::string address = "127.0.0.1";
 
 int main(int argc, char** argv) {
 
+
+	AstrOWar::GameModelSingleton.init();
+
+	cout << "APP START" << endl;
 	/*
 	if (selector) {
 		cout << "SERVER START" << endl;

@@ -24,6 +24,7 @@ battleshipTeszt::~battleshipTeszt() {
 }
 
 void battleshipTeszt::Server() {
+	/*
 	std::cout << "SZERVER indítása" << std::endl;
 	AstrOWar::NetworkSingleton.startAsServer(port);
 	while (!AstrOWar::NetworkSingleton.isEnableConnection()) {
@@ -31,11 +32,14 @@ void battleshipTeszt::Server() {
 	}
 	std::cout << "SERVER: " << "Adat kuldese" << std::endl;
 	AstrOWar::NetworkSingleton.sendMessage("SERVER_");
+	*/
 }
 
 void battleshipTeszt::Client() {
+	/*
 	std::cout << "KLIENS indítása" << std::endl;
 	AstrOWar::NetworkSingleton.startAsClient(address, port);
+	*/
 }
 
 void battleshipTeszt::start() {

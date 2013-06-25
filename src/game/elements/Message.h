@@ -10,6 +10,14 @@
 
 namespace AstrOWar {
 
+#define HELLO 1
+#define OK 2
+#define BAD 3
+#define FIRE 4
+#define IMDIED 5
+#define FIREOK 6
+#define FIREBAD 7
+#define EXIT 8
 
 /*
  * id: csomag azonosítója, a szerver a csatlakozás után küld a kliensnek egy üzenetet 1-es id-val
@@ -27,7 +35,7 @@ namespace AstrOWar {
  * pos: koordináták, X,Y,Z, default érték: 0
  */
 
-class message {
+class Message {
 	int msgType;
 	int posX;
 	int posY;
@@ -36,10 +44,10 @@ class message {
 	int refId;
 
 public:
-	message();
-	virtual ~message();
+	Message();
+	virtual ~Message();
 	void init(int _msgType, int _posX, int _posY, int _posZ, int _id, int _refId);
-	message init(int _msgType, int _id, int _refId);
+	Message init(int _msgType, int _id, int _refId);
 
 	int getMsgType();
 	int getPosX();
@@ -47,7 +55,8 @@ public:
 	int getPosZ();
 	int getId();
 	int getRefId();
-	bool validate(){return msgType != 0;}
+	bool validate();
+	bool validate(int n);
 };
 
 } /* namespace AstrOWar */

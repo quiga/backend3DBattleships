@@ -8,8 +8,8 @@
 #ifndef PARSER_H_
 #define PARSER_H_
 #include "jansson.h"
-#include "../../game/client/Ship.h"
-#include "../../game/server/message.h"
+#include "../../game/elements/Ship.h"
+#include "../../game/elements/Message.h"
 #include <string>
 #include <vector>
 
@@ -26,8 +26,8 @@ protected:
 	int parseShip(std::string path, AstrOWar::Ship &h);
 public:
 	int parse(std::string path, std::vector<AstrOWar::Ship> *ships);
-	AstrOWar::message decode(std::string json);
-	std::string encode(AstrOWar::message msg);
+	AstrOWar::Message decode(std::string json);
+	std::string encode(AstrOWar::Message msg);
 	static Parser& getSingleton();
 };
 extern Parser& JSONSingleton;

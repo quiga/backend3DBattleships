@@ -11,17 +11,18 @@
 
 namespace AstrOWar {
 
-class field {
+class Field {
 private:
 	Ship *hajo;
 	bool isDisruptive;	// felrobbantott-e
+	// positions
 	int posX;
 	int posY;
 	int posZ;
 
 public:
-	field(int x, int y, int z);
-	virtual ~field();
+	Field(int x, int y, int z);
+	virtual ~Field();
 
 	void setShip(Ship *s);
 	void setHajo(Ship *hajo);
@@ -33,6 +34,10 @@ public:
 	int getPosZ() const;
 
 	bool IsDisruptive() const;
+	bool fire(){
+		isDisruptive = true;
+		return hajo != nullptr;
+	}
 
 	std::string toString();
 };

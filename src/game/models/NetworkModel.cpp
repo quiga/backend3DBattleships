@@ -1,47 +1,47 @@
 /*
- * network.cpp
+ * NetworkModel.cpp
  *
  *  Created on: 2013.06.23.
  *      Author: quiga
  */
 
-#include "network.h"
+#include "NetworkModel.h"
 
 namespace AstrOWar {
 
-network::network() :
-		reciverThread(&network::run, this), getMessage(nullptr), _isServer(false) {
+NetworkModel::NetworkModel(GameModel* g) :
+		reciverThread(&NetworkModel::run, this), getMessage(nullptr), _isServer(false), gm(g) {
 	init();
 }
-network::~network() {
+NetworkModel::~NetworkModel() {
 }
 
-bool network::isServer(){
+bool NetworkModel::isServer(){
 	return _isServer;
 }
 
-void network::init() {
+void NetworkModel::init() {
 	mShouldStartGame = false;
 	mSocketConnected = false;
 	mThreadShouldEnd = false;
 }
 
-void network::startAsServer(unsigned short port) {
+void NetworkModel::startAsServer(unsigned short port) {
 	_isServer = true;
-	mNetworkThread.reset(new sf::Thread(&network::listenForClient, this));
+	mNetworkModelThread.reset(new sf::Thread(&NetworkModel::listenForClient, this));
 	mAddress.second = port;
-	mNetworkThread->launch();
+	mNetworkModelThread->launch();
 }
 
-void network::startAsClient(std::string address, unsigned short port) {
+void NetworkModel::startAsClient(std::string address, unsigned short port) {
 	_isServer = false;
-	mNetworkThread.reset(new sf::Thread(&network::connectToServer, this));
+	mNetworkModelThread.reset(new sf::Thread(&NetworkModel::connectToServer, this));
 	mAddress.first = address;
 	mAddress.second = port;
-	mNetworkThread->launch();
+	mNetworkModelThread->launch();
 }
 
-void network::listenForClient() {
+void NetworkModel::listenForClient() {
 	std::cout << "SERVER: " << "Server starts on port " << mAddress.second
 			<< std::endl;
 	sf::TcpListener listener;
@@ -62,7 +62,7 @@ void network::listenForClient() {
 	std::cout << "SERVER: " << "Server Listen Ended" << std::endl;
 }
 
-void network::connectToServer() {
+void NetworkModel::connectToServer() {
 	std::cout << "CLIENT: " << "Connenting to " << mAddress.first << " on port "
 			<< mAddress.second << std::endl;
 
@@ -83,7 +83,7 @@ void network::connectToServer() {
 	std::cout << "Connenction Ended" << std::endl;
 }
 
-void network::sendMessage(std::string msg) {
+void NetworkModel::sendMessage(std::string msg) {
 	if (mSocketConnected) {
 		sf::Packet packetSend;
 		packetSend << msg;
@@ -91,7 +91,7 @@ void network::sendMessage(std::string msg) {
 	}
 }
 
-void network::run() {
+void NetworkModel::run() {
 	std::cout << "run start" << std::endl;
 
 	while (isListenReciver) {
@@ -100,22 +100,16 @@ void network::run() {
 		mSocket.receive(packetReceive);
 		if (packetReceive >> msg) {
 			if (!msg.empty()) {
-				if (getMessage != nullptr){}
-					//GameModelSingleton.messageEventHandler(msg);
+				if (getMessage != nullptr){
+					(gm->*getMessage)(msg);
+				}
 			}
 		}
 	}
 }
 
-void network::registerMessageEventHandler(void (*cb)(std::string)) {
+void NetworkModel::registerMessageEventHandler(void (GameModel::*cb)(std::string)) {
 	getMessage = cb;
 }
-
-network & network::getSingleton() {
-	static network instance;
-	return instance;
-}
-
-network& NetworkSingleton = network::getSingleton();
 
 } /* namespace AstrOWar */

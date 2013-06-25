@@ -1,25 +1,27 @@
 /*
- * physicsModel.cpp
+ * PhysicsModel.cpp
  *
  *  Created on: 2013.06.22.
  *      Author: quiga
  */
 
-#include "physicsModel.h"
+#include "PhysicsModel.h"
 using namespace std;
 
 namespace AstrOWar {
 
-physicsModel::physicsModel() {
+PhysicsModel::PhysicsModel(GameModel *g) : gm(g) {
 }
 
-physicsModel::~physicsModel() {
+PhysicsModel::~PhysicsModel() {
+	destroy();
 }
 
 /**
  *  kocka bal,alsó,elülső sarka a (0,0,0) pont
  */
-void physicsModel::init(int n) {
+void PhysicsModel::init(int n) {
+	destroy();
 	cubeMy.resize(n);
 	cubeFoe.resize(n);
 	for (int i = 0; i < n; i++) {
@@ -29,9 +31,24 @@ void physicsModel::init(int n) {
 			cubeMy[i][j].resize(n);
 			cubeFoe[i][j].resize(n);
 			for (int k = 0; k < n; k++) {
-				cubeMy[i][j][k] = new field(i, j, k);
-				cubeFoe[i][j][k] = new field(i, j, k);
+				cubeMy[i][j][k] = new Field(i, j, k);
+				cubeFoe[i][j][k] = new Field(i, j, k);
 			}
+		}
+	}
+}
+
+void PhysicsModel::destroy(){
+	for(auto x : cubeFoe){
+		for(auto y : x){
+			for(auto z : y)
+				delete z;
+		}
+	}
+	for(auto x : cubeMy){
+		for(auto y : x){
+			for(auto z : y)
+				delete z;
 		}
 	}
 }
@@ -44,7 +61,7 @@ void physicsModel::init(int n) {
  * 		callbackBad - függvénymutató, hiba esetén ez hívódik int paraméterrel,
  * 					  mely tartalmazza a hiba kódját
  */
-void physicsModel::addShip(Ship *s, int x, int y, int z,
+void PhysicsModel::addShip(Ship *s, int x, int y, int z,
 		void (*callbackBad)(int)) {
 	if (!s->isNew()) {
 		callbackBad(1);
@@ -67,11 +84,27 @@ void physicsModel::addShip(Ship *s, int x, int y, int z,
 	}
 }
 
-void physicsModel::addBomb(int _x, int _y, int _z, void (*callbackBad)(int)){
+void PhysicsModel::addBomb(int _x, int _y, int _z, void (*callbackBad)(int)) {
 	cubeFoe[_x][_y][_z]->setDisruptive(true);
 }
 
-void physicsModel::toString() {
+size_t PhysicsModel::getDimension() {
+	return cubeMy.size();
+}
+
+bool PhysicsModel::fire(Message &m) {
+	//INFO ha 4es akkor rám lőttek
+	if (m.getMsgType() == FIRE) {
+		return cubeMy[m.getPosX()][m.getPosY()][m.getPosZ()]->fire();
+	}
+	//INFO ha 6os v. 7es akkor én lőttem
+	else if (m.getMsgType() == FIREOK || m.getMsgType() == FIREBAD) {
+		//addBomb();
+	}
+	return true;	//TODO csak ideiglenes
+}
+
+void PhysicsModel::toString() {
 
 	for (int i = 0; i < cubeMy.size(); i++) {
 		for (int j = 0; j < cubeMy[i].size(); j++) {
