@@ -13,20 +13,28 @@
 #include <memory>
 #include <iostream>
 #include <vector>
+//#include "../client/gameModel.h"
 
 using namespace sf;
 
 namespace AstrOWar {
 
+class gameModel;
+
 class network{
 public:
 
+	static network& getSingleton();
+
 	void startAsServer(unsigned short port);
 	void startAsClient(std::string address, unsigned short port);
-	static network& getSingleton();
+
 	bool isEnableConnection(){return mSocketConnected;}
 
 	void sendMessage(std::string msg);
+	void registerMessageEventHandler(void (*cb)(std::string));
+	bool isServer();
+
 private:
 	network();
 	virtual ~network();
@@ -42,16 +50,15 @@ private:
 	bool mThreadShouldEnd;
 	bool mSocketConnected;
 	bool mShouldStartGame;
-
-	std::vector<std::string> messageList;
-	sf::Mutex mutex;
+	bool _isServer;
 
 	std::pair<std::string, unsigned short> mAddress;
 	sf::TcpSocket mSocket;
-	std::string oldMsg;
 
 	sf::Thread reciverThread;
 	bool isListenReciver;
+
+	void (*getMessage)(std::string);
 
 };
 extern network& NetworkSingleton;

@@ -10,22 +10,27 @@
 using namespace std;
 #include "battleshipTeszt.h"
 
-const unsigned short port = 50002;
+const unsigned short port = 50003;
 const std::string address = "127.0.0.1";
 
 #define SERVER true
 #define CLIENT false
 
+//#define selector true
+#define selector false
+
 int main(int argc, char** argv) {
-	cout << "SERVER START" << endl;
 
-	battleshipTeszt playerOne(SERVER, port);
-	playerOne.start();
-
-	cout << "KLIENS START" << endl;
-
-	battleshipTeszt playerTwo(CLIENT, port, address);
-	playerTwo.start();
-
+	/*
+	if (selector) {
+		cout << "SERVER START" << endl;
+		battleshipTeszt playerOne(SERVER, port);
+		playerOne.start();
+	} else {
+		cout << "KLIENS START" << endl;
+		battleshipTeszt playerTwo(CLIENT, port, address);
+		playerTwo.start();
+	}
+	*/
 	return 0;
 }

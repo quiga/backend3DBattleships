@@ -10,10 +10,14 @@
 namespace AstrOWar {
 
 network::network() :
-		reciverThread(&network::run, this) {
+		reciverThread(&network::run, this), getMessage(nullptr), _isServer(false) {
 	init();
 }
 network::~network() {
+}
+
+bool network::isServer(){
+	return _isServer;
 }
 
 void network::init() {
@@ -23,12 +27,14 @@ void network::init() {
 }
 
 void network::startAsServer(unsigned short port) {
+	_isServer = true;
 	mNetworkThread.reset(new sf::Thread(&network::listenForClient, this));
 	mAddress.second = port;
 	mNetworkThread->launch();
 }
 
 void network::startAsClient(std::string address, unsigned short port) {
+	_isServer = false;
 	mNetworkThread.reset(new sf::Thread(&network::connectToServer, this));
 	mAddress.first = address;
 	mAddress.second = port;
@@ -36,7 +42,8 @@ void network::startAsClient(std::string address, unsigned short port) {
 }
 
 void network::listenForClient() {
-	std::cout << "SERVER: " << "Server starts on port " << mAddress.second << std::endl;
+	std::cout << "SERVER: " << "Server starts on port " << mAddress.second
+			<< std::endl;
 	sf::TcpListener listener;
 
 	listener.setBlocking(false);
@@ -45,8 +52,8 @@ void network::listenForClient() {
 	mThreadShouldEnd = false;
 	while (!mThreadShouldEnd) {
 		if (listener.accept(mSocket) == sf::Socket::Done) {
-			std::cout << "SERVER: " << "Incoming client: " << mSocket.getRemoteAddress()
-					<< std::endl;
+			std::cout << "SERVER: " << "Incoming client: "
+					<< mSocket.getRemoteAddress() << std::endl;
 			mShouldStartGame = true;
 			mSocketConnected = true;
 			mThreadShouldEnd = true;
@@ -64,8 +71,8 @@ void network::connectToServer() {
 		sf::Socket::Status status = mSocket.connect(mAddress.first,
 				mAddress.second);
 		if (status == sf::Socket::Done) {
-			std::cout << "CLIENT: " << "Connected to server: " << mSocket.getRemoteAddress()
-					<< std::endl;
+			std::cout << "CLIENT: " << "Connected to server: "
+					<< mSocket.getRemoteAddress() << std::endl;
 			mShouldStartGame = true;
 			mSocketConnected = true;
 			mThreadShouldEnd = true;
@@ -84,46 +91,27 @@ void network::sendMessage(std::string msg) {
 	}
 }
 
-std::string network::reciveMessage() {
-	/*
-	while (mSocketConnected) {
-		std::string msg;
-		sf::Packet packetReceive;
-
-		mSocket.receive(packetReceive);
-		if (packetReceive >> msg) {
-			if (oldMsg != msg)
-				if (!msg.empty()) {
-					oldMsg = msg;
-					std::cout << msg << std::endl;
-				}
-		}
-	}
-	*/
-	return "";
-}
-
 void network::run() {
 	std::cout << "run start" << std::endl;
 
-	static std::string oldMsg;
 	while (isListenReciver) {
 		std::string msg;
 		sf::Packet packetReceive;
-
 		mSocket.receive(packetReceive);
-
 		if (packetReceive >> msg) {
-			if (oldMsg != msg)
-				if (!msg.empty()) {
-					std::cout << msg << std::endl;
-					oldMsg = msg;
-				}
+			if (!msg.empty()) {
+				if (getMessage != nullptr){}
+					//GameModelSingleton.messageEventHandler(msg);
+			}
 		}
 	}
 }
 
-network& network::getSingleton() {
+void network::registerMessageEventHandler(void (*cb)(std::string)) {
+	getMessage = cb;
+}
+
+network & network::getSingleton() {
 	static network instance;
 	return instance;
 }
