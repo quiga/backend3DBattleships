@@ -10,7 +10,9 @@
 namespace AstrOWar {
 
 NetworkModel::NetworkModel(GameModel* g) :
-		reciverThread(&NetworkModel::run, this), getMessage(nullptr), _isServer(false), gm(g) {
+		reciverThread(&NetworkModel::run, this), getMessage(nullptr) {
+	_isServer = false;
+	gm = g;
 	init();
 }
 NetworkModel::~NetworkModel() {
@@ -68,6 +70,7 @@ void NetworkModel::connectToServer() {
 
 	mThreadShouldEnd = false;
 	while (!mThreadShouldEnd) {
+		std::cout << "CONNECT " << std::endl;
 		sf::Socket::Status status = mSocket.connect(mAddress.first,
 				mAddress.second);
 		if (status == sf::Socket::Done) {
@@ -77,10 +80,24 @@ void NetworkModel::connectToServer() {
 			mSocketConnected = true;
 			mThreadShouldEnd = true;
 			isListenReciver = true;
-			reciverThread.launch();
+			//reciverThread.launch();
 		}
 	}
 	std::cout << "Connenction Ended" << std::endl;
+
+	while (isListenReciver) {
+		std::string msg;
+		sf::Packet packetReceive;
+		mSocket.receive(packetReceive);
+		if (packetReceive >> msg) {
+			if (!msg.empty()) {
+				if (getMessage != nullptr){
+					(gm->*getMessage)(msg);
+				}
+			}
+		}
+	}
+	std::cout << "Client Thread Ended" << std::endl;
 }
 
 void NetworkModel::sendMessage(std::string msg) {

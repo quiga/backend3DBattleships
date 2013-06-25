@@ -15,17 +15,25 @@
 #include "../elements/Message.h"
 #include "../../tools/json/Parser.h"
 
-
 using namespace std;
 
 namespace AstrOWar {
 
-class GameModel{
+class graphics;
+// csak egy mintaosztály, nem létezik
+
+class GameModel {
 private:
-	std::vector<AstrOWar::Ship> kollekcio;
-	map<int, Message> lista;
-	PhysicsModel *pModel;	// fizikai model
-	NetworkModel *nModel;
+	std::vector<AstrOWar::Ship> kollekcio;// a hajók listája, mindegyikből 1 példány
+	map<int, Message> lista;					// elküldött üzeneteket tárolja
+	PhysicsModel *pModel;									// fizikai model
+	NetworkModel *nModel;									// hálózati model
+
+	void (graphics::*fireHandler)(int, int, int);	// lövés esetén értesítés
+	void (graphics::*hitHandler)(int, int, int, bool);// találat esetén értesítés
+	void (graphics::*deadHandler)(bool);			// halál esetén értesítés
+	void (graphics::*exitHandler)();				// kilépés esetén értesítés
+	void (graphics::*errorHandler)(int);	// hiba esetén értesítés, hibakóddal
 
 protected:
 	GameModel();
@@ -50,19 +58,18 @@ public:
 	void init();
 	void createTeszt();
 	static void cbBad(int i);
-	void (NetworkModel::*startServer)(unsigned short);
-	void (NetworkModel::*startClient)(std::string, unsigned short);
-	// hálózati model
 
-	//TODO  grafikai interface
-	//TODO setIP
-	//TODO setPort
-	//TODO startServer
-	//TODO startClient
-	//TODO registerHandler:
-	//TODO *találat
-	//TODO *lövés
+	//INFO grafikai interface
+	void startServer(unsigned short port);
+	void startClient(std::string address, unsigned short port);
 
+	void registerFireEventHandler(void (graphics::*fire)(int, int, int));
+	void registerHitEventHandler(void (graphics::*hit)(int, int, int, bool));
+
+	void registerDeadEventHandler(void (graphics::*dead)(bool));
+	void registerExitEventHandler(void (graphics::*exit)());
+
+	void registerErrorEventHandler(void (graphics::*error)(int));
 };
 
 extern GameModel& GameModelSingleton;

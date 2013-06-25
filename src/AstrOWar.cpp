@@ -8,9 +8,10 @@
 
 #include <iostream>
 using namespace std;
-//#include "battleshipTeszt.h"
-#include "game/models/GameModel.h"
 
+#include "game/models/GameModel.h"
+#include "SFML/Network.hpp"
+using namespace sf;
 const unsigned short port = 50003;
 const std::string address = "127.0.0.1";
 
@@ -20,22 +21,18 @@ const std::string address = "127.0.0.1";
 //#define selector true
 #define selector false
 
-int main(int argc, char** argv) {
-
-
-	AstrOWar::GameModelSingleton.init();
-
+int main(int argc, char* argv[]) {
 	cout << "APP START" << endl;
-	/*
-	if (selector) {
-		cout << "SERVER START" << endl;
-		battleshipTeszt playerOne(SERVER, port);
-		playerOne.start();
-	} else {
-		cout << "KLIENS START" << endl;
-		battleshipTeszt playerTwo(CLIENT, port, address);
-		playerTwo.start();
-	}
-	*/
+	Thread game([]() {
+		AstrOWar::GameModelSingleton.init();
+		if (argc > 1) {
+			AstrOWar::GameModelSingleton.startServer(port);
+		}
+		else {
+			AstrOWar::GameModelSingleton.startClient(address, port);
+		}
+	});
+	game.launch();
+	cout << "APP END" << endl;
 	return 0;
 }

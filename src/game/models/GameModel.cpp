@@ -9,12 +9,12 @@
 
 namespace AstrOWar {
 
-GameModel::GameModel() {
+GameModel::GameModel() :
+		fireHandler(nullptr), hitHandler(nullptr), deadHandler(nullptr), exitHandler(
+				nullptr), errorHandler(nullptr) {
 	pModel = new PhysicsModel(this);
 	nModel = new NetworkModel(this);
 
-	startClient = &NetworkModel::startAsClient;
-	startServer = &NetworkModel::startAsServer;
 }
 
 GameModel::~GameModel() {
@@ -66,6 +66,7 @@ void GameModel::messageEventHandlerOK(Message &m) {
 		}
 	}
 }
+
 void GameModel::messageEventHandlerBAD(Message &m) {
 	if (lista.count(m.getRefId()) > 0) {
 		lista.erase(m.getRefId());
@@ -129,6 +130,39 @@ void GameModel::messageEventHandler(std::string encodedString) {
 			break;
 		}
 	}
+}
+
+void GameModel::startServer(unsigned short port) {
+	std::cout << "SZERVER indítása" << std::endl;
+	nModel->startAsServer(port);
+	while (!nModel->isEnableConnection()) {
+		sf: sleep(sf::milliseconds(500));
+	}
+	std::cout << "SERVER: " << "Adat kuldese" << std::endl;
+	sendMessageOnNetwork(Message().init(HELLO, 1, 0));
+}
+
+void GameModel::startClient(std::string address, unsigned short port) {
+	std::cout << "KLIENS indítása" << std::endl;
+	nModel->startAsClient(address, port);
+}
+
+void GameModel::registerFireEventHandler(
+		void (graphics::*fire)(int, int, int)) {
+	fireHandler = fire;
+}
+void GameModel::registerHitEventHandler(
+		void (graphics::*hit)(int, int, int, bool)) {
+	hitHandler = hit;
+}
+void GameModel::registerDeadEventHandler(void (graphics::*dead)(bool)) {
+	deadHandler = dead;
+}
+void GameModel::registerExitEventHandler(void (graphics::*exit)()) {
+	exitHandler = exit;
+}
+void GameModel::registerErrorEventHandler(void (graphics::*error)(int)) {
+	errorHandler = error;
 }
 
 GameModel& GameModel::getSingleton() {
