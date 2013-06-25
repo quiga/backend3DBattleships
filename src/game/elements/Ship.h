@@ -12,6 +12,12 @@
 #include <iostream>
 using namespace std;
 
+/*
+ * a hajó akkor robban fel, ha a mezőinek legalább X százalékát eltalálták.
+ */
+
+#define X 0.4
+
 namespace AstrOWar {
 class Field;
 
@@ -43,6 +49,7 @@ public:
 	int getY();
 	int getZ();
 	bool isNew();
+	bool isDead();
 
 	Ship* clone();
 	void toString();

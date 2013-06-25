@@ -24,12 +24,14 @@ class graphics;
 
 class GameModel {
 private:
+	bool youtNext;
+	graphics *gr;
 	std::vector<AstrOWar::Ship> kollekcio;// a hajók listája, mindegyikből 1 példány
 	map<int, Message> lista;					// elküldött üzeneteket tárolja
 	PhysicsModel *pModel;									// fizikai model
 	NetworkModel *nModel;									// hálózati model
 
-	void (graphics::*fireHandler)(int, int, int);	// lövés esetén értesítés
+	void (graphics::*fireHandler)(int, int, int, bool);// lövés esetén értesítés
 	void (graphics::*hitHandler)(int, int, int, bool);// találat esetén értesítés
 	void (graphics::*deadHandler)(bool);			// halál esetén értesítés
 	void (graphics::*exitHandler)();				// kilépés esetén értesítés
@@ -55,7 +57,7 @@ protected:
 
 public:
 	static GameModel& getSingleton();
-	void init();
+	void init(graphics *g);
 	void createTeszt();
 	static void cbBad(int i);
 
@@ -63,13 +65,28 @@ public:
 	void startServer(unsigned short port);
 	void startClient(std::string address, unsigned short port);
 
-	void registerFireEventHandler(void (graphics::*fire)(int, int, int));
+	/*
+	 * lövés esetén x,y,z koordináták, true ha sikeres, false ha nem
+	 */
+	void registerFireEventHandler(void (graphics::*fire)(int, int, int, bool));
+	/*
+	 * találat esetén: x,y,z koordináták, és true ha sikeres, false ha nem
+	 */
 	void registerHitEventHandler(void (graphics::*hit)(int, int, int, bool));
-
+	/*
+	 * játékos halála esetén, true ha én, false ha az ellenfél
+	 */
 	void registerDeadEventHandler(void (graphics::*dead)(bool));
+	/*
+	 * játékos kilépése esetén
+	 */
 	void registerExitEventHandler(void (graphics::*exit)());
-
+	/*
+	 * hiba esetén, hibakóddal
+	 */
 	void registerErrorEventHandler(void (graphics::*error)(int));
+
+	bool isYourNext();
 };
 
 extern GameModel& GameModelSingleton;

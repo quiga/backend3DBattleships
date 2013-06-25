@@ -1,5 +1,5 @@
 /*
- * field.h
+ * Field.h
  *
  *  Created on: 2013.06.22.
  *      Author: quiga
@@ -10,7 +10,7 @@
 #include "Ship.h"
 
 namespace AstrOWar {
-
+//TODO hajó halálának jelzése
 class Field {
 private:
 	Ship *hajo;

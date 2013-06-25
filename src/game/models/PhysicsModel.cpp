@@ -10,7 +10,8 @@ using namespace std;
 
 namespace AstrOWar {
 
-PhysicsModel::PhysicsModel(GameModel *g) : gm(g) {
+PhysicsModel::PhysicsModel(GameModel *g) :
+		gm(g) {
 }
 
 PhysicsModel::~PhysicsModel() {
@@ -38,16 +39,16 @@ void PhysicsModel::init(int n) {
 	}
 }
 
-void PhysicsModel::destroy(){
-	for(auto x : cubeFoe){
-		for(auto y : x){
-			for(auto z : y)
+void PhysicsModel::destroy() {
+	for (auto x : cubeFoe) {
+		for (auto y : x) {
+			for (auto z : y)
 				delete z;
 		}
 	}
-	for(auto x : cubeMy){
-		for(auto y : x){
-			for(auto z : y)
+	for (auto x : cubeMy) {
+		for (auto y : x) {
+			for (auto z : y)
 				delete z;
 		}
 	}
@@ -84,7 +85,7 @@ void PhysicsModel::addShip(Ship *s, int x, int y, int z,
 	}
 }
 
-void PhysicsModel::addBomb(int _x, int _y, int _z, void (*callbackBad)(int)) {
+void PhysicsModel::addBomb(int _x, int _y, int _z) {
 	cubeFoe[_x][_y][_z]->setDisruptive(true);
 }
 
@@ -99,9 +100,24 @@ bool PhysicsModel::fire(Message &m) {
 	}
 	//INFO ha 6os v. 7es akkor én lőttem
 	else if (m.getMsgType() == FIREOK || m.getMsgType() == FIREBAD) {
-		//addBomb();
+		addBomb(m.getPosX(), m.getPosY(), m.getPosZ());
 	}
-	return true;	//TODO csak ideiglenes
+	return false;
+}
+
+bool PhysicsModel::idead() {
+	return myShips.size() == 0;
+}
+
+bool PhysicsModel::check() {
+	for (int i = myShips.size() - 1; i >= 0; i--) {
+		if (myShips[i]->isDead()) {
+			Ship* s = myShips[i];
+			myShips.erase(myShips.begin() + i);
+			delete s;
+		}
+	}
+	return false;
 }
 
 void PhysicsModel::toString() {

@@ -85,4 +85,13 @@ void Ship::addField(Field* f) {
 bool Ship::isNew() {
 	return mezok.size() == 0;
 }
+
+bool Ship::isDead(){
+	double i = mezok.size();
+	double j = 0;
+	for(Field* f : mezok)
+		if(f->IsDisruptive()) j++;
+
+	return ((i * X) >= j);
+}
 } /* namespace AstrOWar */
