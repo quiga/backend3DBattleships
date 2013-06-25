@@ -9,7 +9,6 @@
 #define UTILS_HPP_
 
 #include "utils/stringconverters.hpp"
-#include "utils/stringalgorithms.hpp"
 #include "utils/ResourceStore.hpp"
 
 #endif /* UTILS_HPP_ */

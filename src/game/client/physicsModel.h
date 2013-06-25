@@ -11,6 +11,7 @@
 #include "field.h"
 
 #include <iostream>
+using namespace std;
 
 namespace AstrOWar {
 

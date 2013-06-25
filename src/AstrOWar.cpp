@@ -8,32 +8,24 @@
 
 #include <iostream>
 using namespace std;
+#include "battleshipTeszt.h"
 
-#include "game/client/gameModel.h"
-#include "game/server/network.h"
-
-const unsigned short port = 50003;
+const unsigned short port = 50002;
 const std::string address = "127.0.0.1";
 
+#define SERVER true
+#define CLIENT false
+
 int main(int argc, char** argv) {
-	AstrOWar::GameModelSingleton.init();
-	//AstrOWar::GameModelSingleton.createTeszt();
+	cout << "SERVER START" << endl;
 
-	char who;
-	std::cout << "Do you want to be a server (s) or a client (c) ? ";
-	std::cin >> who;
+	battleshipTeszt playerOne(SERVER, port);
+	playerOne.start();
 
-	if (who == 's'){
-		AstrOWar::NetworkSingleton.startAsServer(port);
-		while(!AstrOWar::NetworkSingleton.isEnableConnection()){}
-		cout<<"Adat kuldese"<<endl;
-		AstrOWar::NetworkSingleton.sendMessage("szeva");
-	}
-	else{
-		AstrOWar::NetworkSingleton.startAsClient(address, port);
-	}
+	cout << "KLIENS START" << endl;
 
-
+	battleshipTeszt playerTwo(CLIENT, port, address);
+	playerTwo.start();
 
 	return 0;
 }

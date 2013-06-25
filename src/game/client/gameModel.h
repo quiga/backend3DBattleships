@@ -12,6 +12,7 @@
 #include "../../tools/json/Parser.h"
 #include <vector>
 #include "Ship.h"
+using namespace std;
 
 namespace AstrOWar {
 

@@ -36,7 +36,7 @@ void network::startAsClient(std::string address, unsigned short port) {
 }
 
 void network::listenForClient() {
-	std::cout << "Server starts on port " << mAddress.second << std::endl;
+	std::cout << "SERVER: " << "Server starts on port " << mAddress.second << std::endl;
 	sf::TcpListener listener;
 
 	listener.setBlocking(false);
@@ -45,18 +45,18 @@ void network::listenForClient() {
 	mThreadShouldEnd = false;
 	while (!mThreadShouldEnd) {
 		if (listener.accept(mSocket) == sf::Socket::Done) {
-			std::cout << "Incoming client: " << mSocket.getRemoteAddress()
+			std::cout << "SERVER: " << "Incoming client: " << mSocket.getRemoteAddress()
 					<< std::endl;
 			mShouldStartGame = true;
 			mSocketConnected = true;
 			mThreadShouldEnd = true;
 		}
 	}
-	std::cout << "Server Listen Ended" << std::endl;
+	std::cout << "SERVER: " << "Server Listen Ended" << std::endl;
 }
 
 void network::connectToServer() {
-	std::cout << "Connenting to " << mAddress.first << " on port "
+	std::cout << "CLIENT: " << "Connenting to " << mAddress.first << " on port "
 			<< mAddress.second << std::endl;
 
 	mThreadShouldEnd = false;
@@ -64,7 +64,7 @@ void network::connectToServer() {
 		sf::Socket::Status status = mSocket.connect(mAddress.first,
 				mAddress.second);
 		if (status == sf::Socket::Done) {
-			std::cout << "Connected to server: " << mSocket.getRemoteAddress()
+			std::cout << "CLIENT: " << "Connected to server: " << mSocket.getRemoteAddress()
 					<< std::endl;
 			mShouldStartGame = true;
 			mSocketConnected = true;
@@ -112,7 +112,7 @@ void network::run() {
 		sf::Packet packetReceive;
 
 		mSocket.receive(packetReceive);
-		mSocket.receive(char[], 0, NULL);
+
 		if (packetReceive >> msg) {
 			if (oldMsg != msg)
 				if (!msg.empty()) {

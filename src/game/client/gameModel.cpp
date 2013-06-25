@@ -17,13 +17,7 @@ gameModel::~gameModel() {
 }
 
 void gameModel::init() {
-	cout << "start init" << endl;
-	cout << JSON::JSONSingleton.parse("config/astrowar.json", &kollekcio)
-			<< endl;
-	cout << "data loaded" << endl;
-	for (unsigned int i = 0; i < kollekcio.size(); i++) {
-		kollekcio[i].toString();
-	}
+	JSON::JSONSingleton.parse("config/astrowar.json", &kollekcio);
 }
 
 void gameModel::cbBad(int i) {
