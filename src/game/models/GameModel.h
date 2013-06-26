@@ -16,6 +16,7 @@
 #include "../elements/Message.h"
 #include "../../tools/json/Parser.h"
 #include "GameModelListener.h"
+#include <list>
 
 using namespace std;
 
@@ -74,6 +75,8 @@ public:
 	void reset(int i);
 	bool isEnableConnection();
 	void start();
+
+	std::list< std::pair<std::string, std::string> > getCollection();
 };
 
 extern GameModel& GameModelSingleton;
