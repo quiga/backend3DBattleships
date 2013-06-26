@@ -1,5 +1,6 @@
 {
 	"name" : "Battleship",
+	"type" : 4,
 	"size" : {
 		"x" : 1,
 		"y" : 1,

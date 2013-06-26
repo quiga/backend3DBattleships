@@ -1,5 +1,6 @@
 {
 	"name" : "Carrier",
+	"type" : 6,
 	"size" : {
 		"x" : 2,
 		"y" : 2,

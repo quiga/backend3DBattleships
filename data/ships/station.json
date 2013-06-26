@@ -1,5 +1,6 @@
 {
 	"name" : "Station",
+	"type" : 5, 
 	"size" : {
 		"x" : 3,
 		"y" : 1,
