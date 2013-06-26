@@ -25,16 +25,9 @@ struct graphics{
 };
 }
 
-void server() {
-	AstrOWar::GameModelSingleton.startServer(port);
-}
-
-void client() {
-	AstrOWar::GameModelSingleton.startClient(address, port);
-}
-
 void run(int i){
 	cout << "RUN START" << endl;
+
 	AstrOWar::graphics g;
 	AstrOWar::GameModelSingleton.init(&g);
 	AstrOWar::GameModelSingleton.registerDeadEventHandler(&AstrOWar::graphics::event1);
@@ -43,16 +36,6 @@ void run(int i){
 	AstrOWar::GameModelSingleton.registerErrorEventHandler(&AstrOWar::graphics::event3);
 	AstrOWar::GameModelSingleton.registerExitEventHandler(&AstrOWar::graphics::event4);
 
-	if (i > 1){
-		Thread game(&server);
-		game.launch();
-		cout << "SERVER THREAD STARTED" << endl;
-	}
-	else{
-		Thread game(&client);
-		game.launch();
-		cout << "CLIENT THREAD STARTED" << endl;
-	}
 	cout << "RUN END" << endl;
 }
 

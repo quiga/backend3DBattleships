@@ -12,6 +12,7 @@
 #include "SFML/Network.hpp"
 #include <vector>
 #include "../elements/Ship.h"
+#include "../elements/Pair.h"
 #include "../elements/Message.h"
 #include "../../tools/json/Parser.h"
 
@@ -40,7 +41,7 @@ private:
 	static int getId() {
 		return GameModel::idCounter + 1;
 	}
-
+	static int shipIdCounter;
 protected:
 	GameModel();
 	virtual ~GameModel();
@@ -61,13 +62,11 @@ protected:
 	void _fire(Message &m);
 
 public:
+
 	static GameModel& getSingleton();
 	void init(graphics *g);
 	void createTeszt();
 
-	//INFO grafikai interface
-	void startServer(unsigned short port);
-	void startClient(std::string address, unsigned short port);
 
 	/*
 	 * lövés esetén x,y,z koordináták, true ha sikeres, false ha nem
@@ -90,12 +89,18 @@ public:
 	 */
 	void registerErrorEventHandler(void (graphics::*error)(int));
 
+	void setSocket(sf::TcpSocket *mSocket, bool _iss);
+
 	bool isYourNext();
 	void fire(int x, int y, int z);
-	int addShipToModel(int type, int x, int y, int z);
-	int addShipToModel(std::string type, int x, int y, int z);
+	Pair<int> addShipToModel(int type, int x, int y, int z);
+	Pair<int> addShipToModel(std::string type, int x, int y, int z);
+	Pair<int> editShip(int id, int x, int y, int z);
+	int deleteShip(int id);
 	void exit();
 	void reset(int i);
+	bool isEnableConnection();
+	void start();
 };
 
 extern GameModel& GameModelSingleton;

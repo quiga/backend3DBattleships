@@ -26,18 +26,20 @@ class Field;
 class Ship {
 protected:
 	std::string name;
+	int id;
 	int x, y, z;		// mátrix segédek
 	int type;
 	std::string mesh;
 	std::vector<std::vector<int> > structure;
 	std::vector<Field*> mezok;
-	Ship* _clone(Ship *s);
+	Ship* _clone(Ship *s, int _id);
 
 public:
 	Ship();
 	virtual ~Ship();
 
 	void setName(std::string str);
+	void setId(int i);
 	void setX(int i);
 	void setY(int i);
 	void setZ(int i);
@@ -49,14 +51,15 @@ public:
 	vector<vector<int> > getStructure();
 	std::string getName();
 	std::string getMesh();
+	int getId();
 	int getX();
 	int getY();
 	int getZ();
 	int getType();
 	bool isNew();
 	bool isDead();
-
-	Ship* clone();
+	void resetField();
+	Ship* clone(int id);
 	void toString();
 };
 

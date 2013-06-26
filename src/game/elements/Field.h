@@ -37,6 +37,7 @@ public:
 	bool IsDisruptive();
 	bool fire();
 
+	void resetShip();
 	std::string toString();
 };
 

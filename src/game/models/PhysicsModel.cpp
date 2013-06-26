@@ -68,9 +68,9 @@ void PhysicsModel::destroy() {
  * 		- 1 : már létező hajó
  * 		- 2 : pályán kívül
  */
-int PhysicsModel::addShip(Ship *s, int x, int y, int z) {
+Pair<int> PhysicsModel::addShip(Ship *s, int x, int y, int z) {
 	if (!s->isNew()) {
-		return 1;		// ha már létező hajó
+		return Pair<int>(1, -1);	// ha már létező hajó
 	}
 	myShips.push_back(s);
 	vector<vector<int> > structure = s->getStructure();
@@ -80,14 +80,33 @@ int PhysicsModel::addShip(Ship *s, int x, int y, int z) {
 				if ((x + i >= cubeMy.size()) || (y + k >= cubeMy[x + i].size())
 						|| (z + j >= cubeMy[x + i][y + k].size()) || (x + i < 0)
 						|| (y + k < 0) || (z + j < 0)) {
-					return 2;		// ha kilóg a pályáról
+					return Pair<int>(2, -1);		// ha kilóg a pályáról
 				}
 				cubeMy[x + i][y + k][z + j]->setShip(s);
 				s->addField(cubeMy[x + i][y + k][z + j]);
 			}
 		}
 	}
-	return 0;	// ok
+	return Pair<int>(0, s->getId());	// ok
+}
+
+Pair<int> PhysicsModel::editShip(Ship* s, int x, int y, int z){
+		vector<vector<int> > structure = s->getStructure();
+		s->resetField();
+		for (unsigned int i = 0; i < structure.size(); i++) {
+			for (unsigned int j = 0; j < structure[i].size(); j++) {
+				for (int k = 0; k < structure[i][j]; k++) {
+					if ((x + i >= cubeMy.size()) || (y + k >= cubeMy[x + i].size())
+							|| (z + j >= cubeMy[x + i][y + k].size()) || (x + i < 0)
+							|| (y + k < 0) || (z + j < 0)) {
+						return Pair<int>(2, -1);		// ha kilóg a pályáról
+					}
+					cubeMy[x + i][y + k][z + j]->setShip(s);
+					s->addField(cubeMy[x + i][y + k][z + j]);
+				}
+			}
+		}
+		return Pair<int>(0, s->getId());	// ok
 }
 
 void PhysicsModel::addBomb(int _x, int _y, int _z) {

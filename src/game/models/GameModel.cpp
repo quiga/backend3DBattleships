@@ -10,6 +10,7 @@
 namespace AstrOWar {
 
 int GameModel::idCounter = 0;
+int GameModel::shipIdCounter = 0;
 
 GameModel::GameModel() :
 		fireHandler(nullptr), hitHandler(nullptr), deadHandler(nullptr), exitHandler(
@@ -18,7 +19,6 @@ GameModel::GameModel() :
 	gr = nullptr;
 	pModel = new PhysicsModel(this);
 	nModel = new NetworkModel(this);
-
 }
 
 GameModel::~GameModel() {
@@ -43,20 +43,45 @@ void GameModel::createTeszt() {
 	pModel->toString();
 }
 
-int GameModel::addShipToModel(int type, int x, int y, int z) {
-	for (Ship s : kollekcio) {
-		if (s.getType() == type)
-			return pModel->addShip(s.clone(), x, y, z);
-	}
-	return 3;
+void GameModel::setSocket(sf::TcpSocket *mSocket, bool _iss){
+	nModel->setSocket(mSocket, _iss);
+	youtNext = _iss;
 }
 
-int GameModel::addShipToModel(std::string type, int x, int y, int z) {
+Pair<int> GameModel::addShipToModel(int type, int x, int y, int z){
+	for (Ship s : kollekcio) {
+		if (s.getType() == type)
+			return pModel->addShip(s.clone(GameModel::shipIdCounter++), x, y, z);
+	}
+	return Pair<int>(3, -1);
+}
+
+Pair<int> GameModel::addShipToModel(std::string type, int x, int y, int z) {
 	for (Ship s : kollekcio) {
 		if (s.getName() == type)
-			return pModel->addShip(s.clone(), x, y, z);
+			return pModel->addShip(s.clone(GameModel::shipIdCounter++), x, y, z);
 	}
-	return 3;
+	return Pair<int>(3, -1);
+}
+
+Pair<int> GameModel::editShip(int id, int x, int y, int z){
+	Ship* hajo = nullptr;
+	for(Ship* s : pModel->getShips()){
+		if(s->getId() == id) hajo = s;
+	}
+	if(hajo == nullptr) return Pair<int>(3, -1);
+	return pModel->editShip(hajo, x, y, z);
+}
+
+int GameModel::deleteShip(int id){
+	Ship* hajo = nullptr;
+	for(Ship* s : pModel->getShips()){
+		if(s->getId() == id) hajo = s;
+	}
+	if(hajo==nullptr) return 1;
+	hajo->resetField();
+	delete hajo;
+	return 0;
 }
 
 void GameModel::sendMessageOnNetwork(Message msg) {
@@ -232,21 +257,8 @@ void GameModel::messageEventHandler(std::string encodedString) {
 	}
 }
 
-void GameModel::startServer(unsigned short port) {
-	youtNext = true;
-	std::cout << "SZERVER indítása" << std::endl;
-	nModel->startAsServer(port);
-	while (!nModel->isEnableConnection()) {
-		sf: sleep(sf::milliseconds(500));
-	}
-	std::cout << "SERVER: " << "Adat kuldese" << std::endl;
+void GameModel::start() {
 	sendMessageOnNetwork(Message().init(HELLO, GameModel::getId(), 0));
-}
-
-void GameModel::startClient(std::string address, unsigned short port) {
-	youtNext = false;
-	std::cout << "KLIENS indítása" << std::endl;
-	nModel->startAsClient(address, port);
 }
 /*
  * lövés esetén x,y,z koordináták, true ha sikeres, false ha nem
@@ -300,6 +312,10 @@ void GameModel::exit() {
 void GameModel::reset(int i) {
 	pModel->init(i);
 }
+
+bool GameModel::isEnableConnection(){return nModel->isEnableConnection();}
+
+
 
 GameModel& GameModel::getSingleton() {
 	static GameModel instance;
