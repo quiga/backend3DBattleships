@@ -29,13 +29,14 @@ public:
 	PhysicsModel(GameModel *g);
 	virtual ~PhysicsModel();
 	void init(int n);
-	void addShip(Ship* s, int _x, int _y, int _z, void (*callbackBad)(int));
+	int addShip(Ship* s, int _x, int _y, int _z);
 	void addBomb(int _x, int _y, int _z);
 	void toString();
 	size_t getDimension();
 	bool fire(Message &m);
 	bool idead();
 	bool check();
+	bool checkShip(Message &m);
 };
 
 } /* namespace AstrOWar */

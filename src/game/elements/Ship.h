@@ -12,11 +12,13 @@
 #include <iostream>
 using namespace std;
 
+#include "Field.h"
+
 /*
- * a hajó akkor robban fel, ha a mezőinek legalább X százalékát eltalálták.
+ * a hajó akkor robban fel, ha a mezőinek legalább _G százalékát eltalálták.
  */
 
-#define X 0.4
+#define _G 0.4
 
 namespace AstrOWar {
 class Field;
@@ -25,6 +27,7 @@ class Ship {
 protected:
 	std::string name;
 	int x, y, z;		// mátrix segédek
+	int type;
 	std::string mesh;
 	std::vector<std::vector<int> > structure;
 	std::vector<Field*> mezok;
@@ -38,6 +41,7 @@ public:
 	void setX(int i);
 	void setY(int i);
 	void setZ(int i);
+	void setType(int i);
 	void setMesh(std::string str);
 	void setStructure(vector<vector<int> > v);
 	void addField(Field* f);
@@ -48,6 +52,7 @@ public:
 	int getX();
 	int getY();
 	int getZ();
+	int getType();
 	bool isNew();
 	bool isDead();
 

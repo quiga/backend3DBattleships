@@ -29,10 +29,14 @@ int Parser::parseShip(std::string path, AstrOWar::Ship &h) {
 	if (!root)
 		return 2;
 
-	json_t *name, *x, *y, *z, *mesh, *size, *minta;
+	json_t *name, *x, *y, *z, *mesh, *size, *minta, *type;
 
 	name = json_object_get(root, "name");
 	if (!json_is_string(name))
+		return 1;
+
+	type = json_object_get(root, "type");
+	if (!json_is_integer(type))
 		return 1;
 
 	size = json_object_get(root, "size");
@@ -64,6 +68,7 @@ int Parser::parseShip(std::string path, AstrOWar::Ship &h) {
 	h.setY(json_integer_value(y));
 	h.setZ(json_integer_value(z));
 	h.setMesh(json_string_value(mesh));
+	h.setType(json_integer_value(type));
 
 	int _x = 0, _z = 0;
 	_x = json_integer_value(x);

@@ -15,7 +15,7 @@ Message::Message() :
 
 Message::~Message() {
 }
-void Message::init(int _msgType, int _posX, int _posY, int _posZ, int _id,
+Message Message::init(int _msgType, int _posX, int _posY, int _posZ, int _id,
 		int _refId) {
 	msgType = _msgType;
 	posX = _posX;
@@ -23,6 +23,7 @@ void Message::init(int _msgType, int _posX, int _posY, int _posZ, int _id,
 	posZ = _posZ;
 	id = _id;
 	refId = _refId;
+	return (*this);
 }
 
 Message Message::init(int _msgType, int _id, int _refId) {

@@ -40,15 +40,18 @@ void PhysicsModel::init(int n) {
 }
 
 void PhysicsModel::destroy() {
+	for (Ship* s : myShips) {
+		delete s;
+	}
 	for (auto x : cubeFoe) {
 		for (auto y : x) {
-			for (auto z : y)
+			for (Field* z : y)
 				delete z;
 		}
 	}
 	for (auto x : cubeMy) {
 		for (auto y : x) {
-			for (auto z : y)
+			for (Field* z : y)
 				delete z;
 		}
 	}
@@ -59,30 +62,32 @@ void PhysicsModel::destroy() {
  * paraméterek:
  * 		Ship - hajó objektumra mutat
  * 		x, y, z - pozíció, hova kerüljön
- * 		callbackBad - függvénymutató, hiba esetén ez hívódik int paraméterrel,
- * 					  mely tartalmazza a hiba kódját
+ *
+ * return: hibakód:
+ * 		- 0 : ok
+ * 		- 1 : már létező hajó
+ * 		- 2 : pályán kívül
  */
-void PhysicsModel::addShip(Ship *s, int x, int y, int z,
-		void (*callbackBad)(int)) {
+int PhysicsModel::addShip(Ship *s, int x, int y, int z) {
 	if (!s->isNew()) {
-		callbackBad(1);
-		return;
+		return 1;		// ha már létező hajó
 	}
 	myShips.push_back(s);
 	vector<vector<int> > structure = s->getStructure();
-	for (int i = 0; i < structure.size(); i++) {
-		for (int j = 0; j < structure[i].size(); j++) {
+	for (unsigned int i = 0; i < structure.size(); i++) {
+		for (unsigned int j = 0; j < structure[i].size(); j++) {
 			for (int k = 0; k < structure[i][j]; k++) {
 				if ((x + i >= cubeMy.size()) || (y + k >= cubeMy[x + i].size())
-						|| (z + j >= cubeMy[x + i][y + k].size())) {
-					callbackBad(2);
-					return;
+						|| (z + j >= cubeMy[x + i][y + k].size()) || (x + i < 0)
+						|| (y + k < 0) || (z + j < 0)) {
+					return 2;		// ha kilóg a pályáról
 				}
 				cubeMy[x + i][y + k][z + j]->setShip(s);
 				s->addField(cubeMy[x + i][y + k][z + j]);
 			}
 		}
 	}
+	return 0;	// ok
 }
 
 void PhysicsModel::addBomb(int _x, int _y, int _z) {
@@ -100,7 +105,7 @@ bool PhysicsModel::fire(Message &m) {
 	}
 	//INFO ha 6os v. 7es akkor én lőttem
 	else if (m.getMsgType() == FIREOK || m.getMsgType() == FIREBAD) {
-		addBomb(m.getPosX(), m.getPosY(), m.getPosZ());
+		//	addBomb(m.getPosX(), m.getPosY(), m.getPosZ());
 	}
 	return false;
 }
@@ -110,6 +115,7 @@ bool PhysicsModel::idead() {
 }
 
 bool PhysicsModel::check() {
+
 	for (int i = myShips.size() - 1; i >= 0; i--) {
 		if (myShips[i]->isDead()) {
 			Ship* s = myShips[i];
@@ -120,11 +126,15 @@ bool PhysicsModel::check() {
 	return false;
 }
 
+bool PhysicsModel::checkShip(Message &m) {
+	return cubeMy[m.getPosX()][m.getPosY()][m.getPosZ()]->getHajo()->isDead();
+}
+
 void PhysicsModel::toString() {
 
-	for (int i = 0; i < cubeMy.size(); i++) {
-		for (int j = 0; j < cubeMy[i].size(); j++) {
-			for (int k = 0; k < cubeMy[i][j].size(); k++) {
+	for (unsigned int i = 0; i < cubeMy.size(); i++) {
+		for (unsigned int j = 0; j < cubeMy[i].size(); j++) {
+			for (unsigned int k = 0; k < cubeMy[i][j].size(); k++) {
 				cout << cubeMy[i][j][k]->toString() << " ";
 			}
 			cout << endl;

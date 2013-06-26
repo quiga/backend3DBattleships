@@ -26,16 +26,20 @@ class GameModel {
 private:
 	bool youtNext;
 	graphics *gr;
-	std::vector<AstrOWar::Ship> kollekcio;// a hajók listája, mindegyikből 1 példány
+	std::vector<AstrOWar::Ship> kollekcio; // a hajók listája, mindegyikből 1 példány
 	map<int, Message> lista;					// elküldött üzeneteket tárolja
 	PhysicsModel *pModel;									// fizikai model
 	NetworkModel *nModel;									// hálózati model
 
-	void (graphics::*fireHandler)(int, int, int, bool);// lövés esetén értesítés
-	void (graphics::*hitHandler)(int, int, int, bool);// találat esetén értesítés
+	void (graphics::*fireHandler)(int, int, int, bool, bool);	// lövés esetén értesítés
+	void (graphics::*hitHandler)(int, int, int, bool, bool);// találat esetén értesítés
 	void (graphics::*deadHandler)(bool);			// halál esetén értesítés
 	void (graphics::*exitHandler)();				// kilépés esetén értesítés
 	void (graphics::*errorHandler)(int);	// hiba esetén értesítés, hibakóddal
+	static int idCounter;
+	static int getId() {
+		return GameModel::idCounter + 1;
+	}
 
 protected:
 	GameModel();
@@ -50,6 +54,7 @@ protected:
 	void messageEventHandlerIMDIED(Message &m);
 	void messageEventHandlerFIREOK(Message &m);
 	void messageEventHandlerFIREBAD(Message &m);
+	void messageEventHandlerFIRESUCESS(Message &m);
 
 	void sendMessageOnNetwork(Message msg);
 
@@ -59,7 +64,6 @@ public:
 	static GameModel& getSingleton();
 	void init(graphics *g);
 	void createTeszt();
-	static void cbBad(int i);
 
 	//INFO grafikai interface
 	void startServer(unsigned short port);
@@ -68,11 +72,11 @@ public:
 	/*
 	 * lövés esetén x,y,z koordináták, true ha sikeres, false ha nem
 	 */
-	void registerFireEventHandler(void (graphics::*fire)(int, int, int, bool));
+	void registerFireEventHandler(void (graphics::*fire)(int, int, int, bool, bool));
 	/*
 	 * találat esetén: x,y,z koordináták, és true ha sikeres, false ha nem
 	 */
-	void registerHitEventHandler(void (graphics::*hit)(int, int, int, bool));
+	void registerHitEventHandler(void (graphics::*hit)(int, int, int, bool, bool));
 	/*
 	 * játékos halála esetén, true ha én, false ha az ellenfél
 	 */
@@ -87,6 +91,11 @@ public:
 	void registerErrorEventHandler(void (graphics::*error)(int));
 
 	bool isYourNext();
+	void fire(int x, int y, int z);
+	int addShipToModel(int type, int x, int y, int z);
+	int addShipToModel(std::string type, int x, int y, int z);
+	void exit();
+	void reset(int i);
 };
 
 extern GameModel& GameModelSingleton;

@@ -10,7 +10,8 @@
 #include "Ship.h"
 
 namespace AstrOWar {
-//TODO hajó halálának jelzése
+class Ship;
+//INFO hajó halálának jelzése
 class Field {
 private:
 	Ship *hajo;
@@ -33,11 +34,8 @@ public:
 	int getPosY() const;
 	int getPosZ() const;
 
-	bool IsDisruptive() const;
-	bool fire(){
-		isDisruptive = true;
-		return hajo != nullptr;
-	}
+	bool IsDisruptive();
+	bool fire();
 
 	std::string toString();
 };

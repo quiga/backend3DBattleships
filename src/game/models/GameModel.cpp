@@ -9,10 +9,13 @@
 
 namespace AstrOWar {
 
+int GameModel::idCounter = 0;
+
 GameModel::GameModel() :
 		fireHandler(nullptr), hitHandler(nullptr), deadHandler(nullptr), exitHandler(
 				nullptr), errorHandler(nullptr) {
 	youtNext = false;
+	gr = nullptr;
 	pModel = new PhysicsModel(this);
 	nModel = new NetworkModel(this);
 
@@ -27,31 +30,46 @@ void GameModel::init(graphics *g) {
 	nModel->registerMessageEventHandler(&GameModel::messageEventHandler);
 }
 
-void GameModel::cbBad(int i) {
-	cout << "hiba: " << i << endl;
-}
-
 /*
  *  n = 10
  *	add Fighter, Destroyer, Battleship, Carrier to physicsModel
  */
 void GameModel::createTeszt() {
 	pModel->init(10);
-	pModel->addShip(kollekcio[0].clone(), 0, 3, 0, &GameModel::cbBad);
-	pModel->addShip(kollekcio[1].clone(), 1, 6, 0, &GameModel::cbBad);
-	pModel->addShip(kollekcio[3].clone(), 2, 0, 0, &GameModel::cbBad);
-	pModel->addShip(kollekcio[5].clone(), 3, 0, 0, &GameModel::cbBad);
+	addShipToModel("Fighter", 0, 3, 0);
+	addShipToModel("Destroyer", 1, 6, 0);
+	addShipToModel("Battleship", 2, 0, 0);
+	addShipToModel("Carrier", 3, 0, 0);
 	pModel->toString();
+}
+
+int GameModel::addShipToModel(int type, int x, int y, int z) {
+	for (Ship s : kollekcio) {
+		if (s.getType() == type)
+			return pModel->addShip(s.clone(), x, y, z);
+	}
+	return 3;
+}
+
+int GameModel::addShipToModel(std::string type, int x, int y, int z) {
+	for (Ship s : kollekcio) {
+		if (s.getName() == type)
+			return pModel->addShip(s.clone(), x, y, z);
+	}
+	return 3;
 }
 
 void GameModel::sendMessageOnNetwork(Message msg) {
 	lista[msg.getId()] = msg;
+	if (msg.getId() > GameModel::idCounter)
+		GameModel::idCounter = msg.getId();
 	nModel->sendMessage(JSON::JSONSingleton.encode(msg));
 }
 
 void GameModel::messageEventHandlerHELLO(Message &m) {
 	if (!nModel->isServer()) {
-		sendMessageOnNetwork(Message().init(HELLO, m.getId() + 1, m.getId()));
+		sendMessageOnNetwork(
+				Message().init(HELLO, GameModel::getId(), m.getId()));
 	}
 }
 void GameModel::messageEventHandlerEXIT(Message &m) {
@@ -59,7 +77,6 @@ void GameModel::messageEventHandlerEXIT(Message &m) {
 	if (exitHandler != nullptr)
 		(gr->*exitHandler)();
 }
-
 void GameModel::messageEventHandlerOK(Message &m) {
 	if (lista.count(m.getRefId()) > 0) {
 		Message oldM = lista[m.getRefId()];
@@ -73,7 +90,6 @@ void GameModel::messageEventHandlerOK(Message &m) {
 		}
 	}
 }
-
 void GameModel::messageEventHandlerBAD(Message &m) {
 	if (lista.count(m.getRefId()) > 0) {
 		Message oldM = lista[m.getRefId()];
@@ -92,23 +108,30 @@ void GameModel::messageEventHandlerFIRE(Message &m) {
 			if (pModel->fire(m)) {
 				//INFO eredmény alapján FIREOK
 				sendMessageOnNetwork(
-						Message().init(FIREOK, m.getId() + 1, m.getId()));
-				pModel->check();
-				if (hitHandler != nullptr)
-					(gr->*hitHandler)(m.getPosX(), m.getPosY(), m.getPosZ(),
-							true);
+						Message().init(FIREOK, GameModel::getId(), m.getId()));
+				if (pModel->checkShip(m)) {
+					if (hitHandler != nullptr)	// sucess
+						(gr->*hitHandler)(m.getPosX(), m.getPosY(), m.getPosZ(),
+								true, true);
+					pModel->check();
+				} else {
+					if (hitHandler != nullptr) // csak sérülés
+						(gr->*hitHandler)(m.getPosX(), m.getPosY(), m.getPosZ(),
+								true, false);
+				}
+
 				if (pModel->idead()) {
 					sendMessageOnNetwork(
-							Message().init(IMDIED, m.getId() + 2, 0));
+							Message().init(IMDIED, GameModel::getId(), 0));
 				}
 
 			} else {
 				//INFO eredmény alapján FIREBAD
 				sendMessageOnNetwork(
-						Message().init(FIREBAD, m.getId() + 1, m.getId()));
+						Message().init(FIREBAD, GameModel::getId(), m.getId()));
 				if (hitHandler != nullptr)
 					(gr->*hitHandler)(m.getPosX(), m.getPosY(), m.getPosZ(),
-							false);
+							false, false);
 			}
 			youtNext = true;
 			return;
@@ -119,7 +142,7 @@ void GameModel::messageEventHandlerFIRE(Message &m) {
 }
 void GameModel::messageEventHandlerIMDIED(Message &m) {
 	//INFO az ellenfél az összes hajóját elvesztette
-	sendMessageOnNetwork(Message().init(OK, m.getId() + 1, m.getId()));
+	sendMessageOnNetwork(Message().init(OK, GameModel::getId(), m.getId()));
 	if (deadHandler != nullptr) {
 		(gr->*deadHandler)(false);
 	}
@@ -134,7 +157,23 @@ void GameModel::messageEventHandlerFIREOK(Message &m) {
 			pModel->fire(m);
 			youtNext = false;
 			if (fireHandler != nullptr) {
-				(gr->*fireHandler)(m.getPosX(), m.getPosY(), m.getPosZ(), true);
+				(gr->*fireHandler)(m.getPosX(), m.getPosY(), m.getPosZ(), true,
+						false);
+			}
+		}
+	}
+}
+void GameModel::messageEventHandlerFIRESUCESS(Message &m) {
+	if (lista.count(m.getRefId()) > 0) {
+		Message oldM = lista[m.getRefId()];
+		lista.erase(m.getRefId());
+
+		if (oldM.getMsgType() == FIRE) {
+			pModel->fire(m);
+			youtNext = false;
+			if (fireHandler != nullptr) {
+				(gr->*fireHandler)(m.getPosX(), m.getPosY(), m.getPosZ(), true,
+						true);
 			}
 		}
 	}
@@ -149,7 +188,7 @@ void GameModel::messageEventHandlerFIREBAD(Message &m) {
 			pModel->fire(m);
 			youtNext = false;
 			if (fireHandler != nullptr) {
-				(gr->*fireHandler)(m.getPosX(), m.getPosY(), m.getPosZ(),
+				(gr->*fireHandler)(m.getPosX(), m.getPosY(), m.getPosZ(), false,
 						false);
 			}
 		}
@@ -158,6 +197,8 @@ void GameModel::messageEventHandlerFIREBAD(Message &m) {
 
 void GameModel::messageEventHandler(std::string encodedString) {
 	Message m = JSON::JSONSingleton.decode(encodedString);
+	if (GameModel::idCounter < m.getId())
+		idCounter = m.getId();
 	if (m.validate()) {
 		switch (m.getMsgType()) {
 		case HELLO:
@@ -181,6 +222,9 @@ void GameModel::messageEventHandler(std::string encodedString) {
 		case FIREBAD:
 			messageEventHandlerFIREBAD(m);
 			break;
+		case FIRESUCESS:
+			messageEventHandlerFIRESUCESS(m);
+			break;
 		case EXIT:
 			messageEventHandlerEXIT(m);
 			break;
@@ -196,7 +240,7 @@ void GameModel::startServer(unsigned short port) {
 		sf: sleep(sf::milliseconds(500));
 	}
 	std::cout << "SERVER: " << "Adat kuldese" << std::endl;
-	sendMessageOnNetwork(Message().init(HELLO, 1, 0));
+	sendMessageOnNetwork(Message().init(HELLO, GameModel::getId(), 0));
 }
 
 void GameModel::startClient(std::string address, unsigned short port) {
@@ -204,21 +248,35 @@ void GameModel::startClient(std::string address, unsigned short port) {
 	std::cout << "KLIENS indítása" << std::endl;
 	nModel->startAsClient(address, port);
 }
-
+/*
+ * lövés esetén x,y,z koordináták, true ha sikeres, false ha nem
+ */
 void GameModel::registerFireEventHandler(
-		void (graphics::*fire)(int, int, int, bool)) {
+		void (graphics::*fire)(int, int, int, bool, bool)) {
 	fireHandler = fire;
 }
+/*
+ * találat esetén: x,y,z koordináták, és true ha sikeres, false ha nem
+ */
 void GameModel::registerHitEventHandler(
-		void (graphics::*hit)(int, int, int, bool)) {
+		void (graphics::*hit)(int, int, int, bool, bool)) {
 	hitHandler = hit;
 }
+/*
+ * játékos halála esetén, true ha én, false ha az ellenfél
+ */
 void GameModel::registerDeadEventHandler(void (graphics::*dead)(bool)) {
 	deadHandler = dead;
 }
+/*
+ * játékos kilépése esetén
+ */
 void GameModel::registerExitEventHandler(void (graphics::*exit)()) {
 	exitHandler = exit;
 }
+/*
+ * hiba esetén, hibakóddal
+ */
 void GameModel::registerErrorEventHandler(void (graphics::*error)(int)) {
 	errorHandler = error;
 }
@@ -226,7 +284,22 @@ void GameModel::registerErrorEventHandler(void (graphics::*error)(int)) {
 bool GameModel::isYourNext() {
 	return youtNext;
 }
-;
+/*
+ * lövés leadása ellenfélre
+ */
+void GameModel::fire(int x, int y, int z) {
+	sendMessageOnNetwork(Message().init(FIRE, x, y, z, GameModel::getId(), 0));
+}
+/*
+ * kilépés kezdeményezése
+ */
+void GameModel::exit() {
+	sendMessageOnNetwork(Message().init(EXIT, GameModel::getId(), 0));
+}
+
+void GameModel::reset(int i) {
+	pModel->init(i);
+}
 
 GameModel& GameModel::getSingleton() {
 	static GameModel instance;

@@ -69,6 +69,14 @@ std::string Ship::getMesh() {
 	return mesh;
 }
 
+int Ship::getType(){
+	return type;
+}
+
+void Ship::setType(int i){
+	type = i;
+}
+
 void Ship::toString() {
 	cout << name << endl;
 	for (unsigned int i = 0; i < structure.size(); i++) {
@@ -92,6 +100,6 @@ bool Ship::isDead(){
 	for(Field* f : mezok)
 		if(f->IsDisruptive()) j++;
 
-	return ((i * X) >= j);
+	return ((i * _G) >= j);
 }
 } /* namespace AstrOWar */

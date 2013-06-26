@@ -36,7 +36,7 @@ void Field::setHajo(Ship* hajo) {
 	this->hajo = hajo;
 }
 
-bool Field::IsDisruptive() const {
+bool Field::IsDisruptive(){
 	return isDisruptive;
 }
 
@@ -54,6 +54,11 @@ int Field::getPosY() const {
 
 int Field::getPosZ() const {
 	return posZ;
+}
+
+bool Field::fire() {
+	isDisruptive = true;
+	return hajo != nullptr;
 }
 
 } /* namespace AstrOWar */

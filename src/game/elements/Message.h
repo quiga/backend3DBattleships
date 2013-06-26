@@ -17,7 +17,8 @@ namespace AstrOWar {
 #define IMDIED 5
 #define FIREOK 6
 #define FIREBAD 7
-#define EXIT 8
+#define FIRESUCESS 8
+#define EXIT 9
 
 /*
  * id: csomag azonosítója, a szerver a csatlakozás után küld a kliensnek egy üzenetet 1-es id-val
@@ -30,12 +31,14 @@ namespace AstrOWar {
  * 			- 5 : IMDIED
  * 			- 6 : FIREOK
  * 			- 7 : FIREBAD
- * 			- 8 : EXIT
+ * 			- 8 : FIRESUCESS
+ * 			- 9 : EXIT
  * 			ha 0, akkor a csomag hibás
  * pos: koordináták, X,Y,Z, default érték: 0
  */
 
 class Message {
+protected:
 	int msgType;
 	int posX;
 	int posY;
@@ -46,7 +49,7 @@ class Message {
 public:
 	Message();
 	virtual ~Message();
-	void init(int _msgType, int _posX, int _posY, int _posZ, int _id, int _refId);
+	Message init(int _msgType, int _posX, int _posY, int _posZ, int _id, int _refId);
 	Message init(int _msgType, int _id, int _refId);
 
 	int getMsgType();
